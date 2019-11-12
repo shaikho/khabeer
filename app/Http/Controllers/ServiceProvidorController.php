@@ -1,0 +1,118 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Resources\ServiceProvidorResource;
+use Illuminate\Http\Request;
+use App\ServiceProvidor;
+
+class ServiceProvidorController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $serviceprovider = ServiceProvidor::All();
+        return new ServiceProvidorResource($serviceprovider);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $serviceprovider = $request->isMethod('put') ? ServiceProvidor::findOrFail
+        ($request->id) : new ServiceProvidor;
+        
+        $serviceprovider->username = $request->input('username');
+        $serviceprovider->phonenumber = $request->input('phonenumber');
+        $serviceprovider->password = $request->input('password');
+        $serviceprovider->buildingno = $request->input('buildingno');
+        $serviceprovider->unitno = $request->input('unitno');
+        $serviceprovider->docs = $request->input('docs');
+        $serviceprovider->profileimg = $request->input('profileimg');
+        $serviceprovider->role = $request->input('role');
+        $serviceprovider->postalcode = $request->input('postalcode');
+        $serviceprovider->neighborhood = $request->input('neighborhood');
+        $serviceprovider->nationalid = $request->input('nationalid');
+        $serviceprovider->nationaladdress = $request->input('nationaladdress');
+        $serviceprovider->rate = $request->input('rate');
+        $serviceprovider->clients = $request->input('clients');
+        $serviceprovider->type = $request->input('type');
+        $serviceprovider->approved = $request->input('approved');
+        $serviceprovider->code = $request->input('code');
+        $serviceprovider->active = $request->input('active');
+        $serviceprovider->requestid = $request->input('requestid');
+        $serviceprovider->subserviceid = $request->input('subserviceid');
+
+        if($serviceprovider->save()){
+            return new ServiceProvidorResource($serviceprovider);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $serviceprovider = ServiceProvidor::findOrFail($id);
+        return new UserResource($serviceprovider);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $serviceprovider = ServiceProvidor::findOrFail($id);
+
+        if($serviceprovider->delete()){
+            return new ServiceProvidorResource($serviceprovider);
+        }
+    }
+}
