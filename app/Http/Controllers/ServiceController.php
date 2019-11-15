@@ -40,9 +40,33 @@ class ServiceController extends Controller
         $service = $request->isMethod('put') ? Service::findOrFail
         ($request->id) : new Service;
         
-        $service->servicename = $request->input('servicename');
-        $service->servicenamearabic = $request->input('servicenamearabic');
-        $service->description = $request->input('description');
+        //$service->servicename = $request->input('servicename');
+        if (empty($request->input('servicename'))) {
+            return [
+                'Message'=>'servicename is required.'
+            ];
+        }
+        else {
+            $service->servicename = $request->input('servicename');
+        }
+        //$service->servicenamearabic = $request->input('servicenamearabic');
+        if (empty($request->input('servicenamearabic'))) {
+            return [
+                'Message'=>'servicenamearabic is required.'
+            ];
+        }
+        else {
+            $service->servicenamearabic = $request->input('servicenamearabic');
+        }
+        //$service->description = $request->input('description');
+        if (empty($request->input('description'))) {
+            return [
+                'Message'=>'description is required.'
+            ];
+        }
+        else {
+            $service->description = $request->input('description');
+        }
         $service->arabicdescription = $request->input('arabicdescription');
         $service->iconurl = $request->input('iconurl');
 

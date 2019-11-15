@@ -36,12 +36,21 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::post('service','ServiceController@store');
       Route::put('service','ServiceController@store');
       Route::delete('service/{id}','ServiceController@destroy');
+      //servicesprovidors
+      Route::get('serviceprovidors','ServiceProvidorController@index');
+      Route::get('serviceprovidor/{id}','ServiceProvidorController@show');
+      Route::post('serviceprovidor','ServiceProvidorController@store');
+      Route::put('serviceprovidor','ServiceProvidorController@store');
+      Route::delete('serviceprovidor/{id}','ServiceProvidorController@destroy');
       //requests
       Route::get('requests','RequestController@index');
       Route::get('request/{id}','RequestController@show');
       Route::post('request','RequestController@store');
       Route::put('request','RequestController@store');
       Route::delete('request/{id}','RequestController@destroy');
+      Route::get('userrequests/{id}','RequestController@requestsbyuser');
+      Route::get('providerrequests/{id}','RequestController@requestsbyprovider');
+      Route::post('filterrequests','RequestController@filterrequests');
       //users
       Route::get('users','UserController@index');
       Route::get('user/{id}','UserController@show');

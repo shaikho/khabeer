@@ -40,9 +40,33 @@ class UserController extends Controller
         $user = $request->isMethod('put') ? User::findOrFail
         ($request->id) : new User;
         
-        $user->username = $request->input('username');
-        $user->password = $request->input('password');
-        $user->phonenumber = $request->input('phonenumber');
+        //$user->username = $request->input('username');
+        if (empty($request->input('username'))) {
+            return [
+                'Message'=>'username is required.'
+            ];
+        }
+        else {
+            $user->username = $request->input('username');
+        }
+        //$user->password = $request->input('password');
+        if (empty($request->input('password'))) {
+            return [
+                'Message'=>'password is required.'
+            ];
+        }
+        else {
+            $user->password = $request->input('password');
+        }
+        //$user->phonenumber = $request->input('phonenumber');
+        if (empty($request->input('phonenumber'))) {
+            return [
+                'Message'=>'phonenumber is required.'
+            ];
+        }
+        else {
+            $user->phonenumber = $request->input('phonenumber');
+        }
         $user->profileimg = $request->input('profileimg');
         $user->location = $request->input('location');
         $user->role = $request->input('role');

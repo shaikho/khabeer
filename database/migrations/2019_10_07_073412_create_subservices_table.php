@@ -19,10 +19,10 @@ class CreateSubservicesTable extends Migration
             $table->string('subservicenamearabic');
             $table->string('price');
             $table->string('status')->nullable();
+            $table->string('iconurl')->nullable();
             $table->string('slug')->nullable();
             $table->string('description')->nullable();
             $table->string('descriptionarabic')->nullable();
-            $table->string('iconurl')->nullable();
             $table->string('serviceid');
             $table->timestamps();
         });

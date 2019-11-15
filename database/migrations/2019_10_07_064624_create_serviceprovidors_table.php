@@ -15,28 +15,28 @@ class CreateServiceprovidorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('serviceprovidors', function (Blueprint $table) {
+        Schema::create('service_providors', function (Blueprint $table) {
             $table->Increments('id');
             $table->string('username');
-            $table->string('phonenumber')->Unique();
-            $table->string('password')->Nullable();
-            $table->string('buildingno')->Nullable();
-            $table->string('unitno')->Nullable();
-            $table->string('docs')->Nullable();
-            $table->string('profileimg')->Nullable();
-            $table->string('role')->Nullable();
-            $table->string('postalcode')->Nullable();
-            $table->string('neighborhood')->Nullable();
-            $table->string('nationalid')->Nullable();
-            $table->string('nationaladdress')->Nullable();
-            $table->string('rate')->Nullable();
-            $table->string('clients')->Nullable();
-            $table->string('type')->Nullable();
-            $table->string('approved')->Nullable();
-            $table->string('code')->Nullable();
-            $table->string('active')->Nullable();
-            $table->string('requestid')->Nullable();
-            $table->string('subserviceid')->Nullable();
+            $table->string('phonenumber')->uniqid();
+            $table->string('password')->nullable();
+            $table->string('buildingno')->nullable();
+            $table->string('unitno')->nullable();
+            $table->string('docs')->nullable();
+            $table->string('profileimg')->nullable();
+            $table->string('role')->nullable();
+            $table->string('postalcode')->nullable();
+            $table->string('neighborhood')->nullable();
+            $table->string('nationalid')->nullable();
+            $table->string('nationaladdress')->nullable();
+            $table->string('rate')->nullable();
+            $table->string('clients')->nullable();
+            $table->string('type')->nullable();
+            $table->string('approved')->nullable();
+            $table->string('code')->nullable();
+            $table->string('active')->nullable();
+            $table->string('requestid')->nullable();
+            $table->string('subserviceid')->nullable();
             $table->timestamps();
         });
     }

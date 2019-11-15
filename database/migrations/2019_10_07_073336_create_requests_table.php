@@ -14,15 +14,15 @@ class CreateRequestsTable extends Migration
     public function up()
     {
         Schema::create('r_m_s', function (Blueprint $table) {
-            $table->string('id');
-            $table->string('subno')->unique();
+            $table->increments('id');
+            $table->string('subno');
             $table->string('subserviceprice');
             $table->string('subservicename')->nullable();
             $table->string('subservicearabicname')->nullable();
             $table->string('enddate');
-            $table->string('location')->nullable();
             $table->string('userid');
             $table->string('providerid');
+            $table->string('location')->nullable();
             $table->string('subserviceslug')->nullable();
             $table->string('cancelled')->nullable();
             $table->string('cancelmessage')->nullable();

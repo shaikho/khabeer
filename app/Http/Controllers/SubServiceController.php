@@ -39,17 +39,48 @@ class SubServiceController extends Controller
     {
         $subservice = $request->isMethod('put') ? Subservice::findOrFail
         ($request->id) : new SubService;
-
-        //$subservice->id = $request->input('id');
-        $subservice->subservicename = $request->input('subservicename');
-        $subservice->subservicenamearabic = $request->input('subservicenamearabic');
-        $subservice->price = $request->input('price');
+        
+        //$subservice->subservicename = $request->input('subservicename');
+        if (empty($request->input('subservicename'))) {
+            return [
+                'Message'=>'subservicename is required.'
+            ];
+        }
+        else {
+            $subservice->subservicename = $request->input('subservicename');
+        }
+        //$subservice->subservicenamearabic = $request->input('subservicenamearabic');
+        if (empty($request->input('subservicenamearabic'))) {
+            return [
+                'Message'=>'subservicenamearabic is required.'
+            ];
+        }
+        else {
+            $subservice->subservicenamearabic = $request->input('subservicenamearabic');
+        }
+        //$subservice->price = $request->input('price');
+        if (empty($request->input('price'))) {
+            return [
+                'Message'=>'price is required.'
+            ];
+        }
+        else {
+            $subservice->price = $request->input('price');
+        }
         $subservice->status = $request->input('status');
         $subservice->slug = $request->input('slug');
         $subservice->description = $request->input('description');
         $subservice->descriptionarabic = $request->input('descriptionarabic');
         $subservice->iconurl = $request->input('iconurl');
-        $subservice->serviceid = $request->input('serviceid');
+        //$subservice->serviceid = $request->input('serviceid');
+        if (empty($request->input('serviceid'))) {
+            return [
+                'Message'=>'serviceid is required.'
+            ];
+        }
+        else {
+            $subservice->serviceid = $request->input('serviceid');
+        }
 
         if($subservice->save()){
             return new SubServiceResource($subservice);
@@ -113,7 +144,7 @@ class SubServiceController extends Controller
         //$subservices = SubService::find($id, ['subservicename', 'subservicenamearabic','price','status','slug','description','descriptionarabic','serviceid','created_at','update_at']);
         //$subservices = SubService::all(['serviceid'])->toArray();
         //$subservices = SubService::where('serviceid', $id)->pluck('subservicename', 'subservicenamearabic','price','status','slug','description','descriptionarabic','serviceid','created_at','update_at')->all();
-        $subservices = SubService::where('serviceid', $id)->get(['subservicename', 'subservicenamearabic','price','status','slug','description','descriptionarabic','serviceid','created_at','updated_at']);
+        $subservices = SubService::where('serviceid', $id)->get(['id','subservicename', 'subservicenamearabic','price','status','slug','description','descriptionarabic','serviceid','created_at','updated_at','iconurl']);
         return new SubServiceResource($subservices);
     }
 }

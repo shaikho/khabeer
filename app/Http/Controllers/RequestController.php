@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Events\JobRequest;
 use App\Http\Requsts;
 use App\RM;
 use Illuminate\Http\Request;
@@ -39,26 +39,87 @@ class RequestController extends Controller
      */
     public function store(Request $request)
     {
-        $req = $request->isMethod('put') ? RM::findOrFail
-        ($request->id) : new RM;
-
-        //$req->id = $request->input('id');
-        $req->subno = $request->input('subno');
-        $req->subserviceprice = $request->input('subserviceprice');
-        $req->subservicename = $request->input('subservicename');
-        $req->subservicearabicname = $request->input('subservicearabicname');
-        $req->enddate = $request->input('enddate');
-        $req->userid = $request->input('userid');
-        $req->providerid = $request->input('providerid');
+        $req = $request->isMethod('put') ?
+        RM::findOrFail($request->id) : new RM;
+        
+        // if($request->isMethod('put')){
+        //     $req = RM::find($request);
+        // }
+        
+        //$req->subno = $request->input('subno');
+        if (!empty($request->input('subno'))) {
+            $req->subno = $request->input('subno');
+        }
+        else {
+            return [
+                'Message'=>'subno is required.'
+            ];
+        }
+        //$req->subserviceprice = $request->input('subserviceprice');
+        if (!empty($request->input('subserviceprice'))) {
+            $req->subserviceprice = $request->input('subserviceprice');
+        }
+        else {
+            return [
+                'Message'=>'subserviceprice is required.'
+            ];
+        }
+        //$req->subservicename = $request->input('subservicename');
+        if (!empty($request->input('subservicename'))) {
+            $req->subservicename = $request->input('subservicename');
+        }
+        else {
+            return [
+                'Message'=>'subservicename is required.'
+            ];
+        }
+        //$req->enddate = $request->input('enddate');
+        if (!empty($request->input('enddate'))) {
+            $req->enddate = $request->input('enddate');
+        }
+        else {
+            return [
+                'Message'=>'enddate is required.'
+            ];
+        }
+        //$req->subservicearabicname = $request->input('subservicearabicname');
+        if (!empty($request->input('subservicearabicname'))) {
+            $req->subservicearabicname = $request->input('subservicearabicname');
+        }
+        else {
+            return [
+                'Message'=>'subservicearabicname is required.'
+            ];
+        }
+        //$req->userid = $request->input('userid');
+        if (!empty($request->input('userid'))) {
+            $req->userid = $request->input('userid');
+        }
+        else {
+            return [
+                'Message'=>'userid is required.'
+            ];
+        }
+        //$req->providerid = $request->input('');
+        if (!empty($request->input('providerid'))) {
+            $req->providerid = $request->input('providerid');
+        }
+        else {
+            return [
+                'Message'=>'providerid is required.'
+            ];
+        }
         $req->subserviceslug = $request->input('subserviceslug');
         $req->cancelled = $request->input('cancelled');
-        $req->location = $request->input('location');
         $req->cancelmessage = $request->input('cancelmessage');
         $req->status = $request->input('status');
         $req->user_lang = $request->input('user_lang');
         $req->userauth = $request->input('userauth');
         $req->providorlang = $request->input('providorlang');
         $req->providorauth = $request->input('providorauth');
+        $req->location = $request->input('location');
+
+        //event(new JobRequest($req));
 
         if($req->save()){
             return new RequestResource($req);
@@ -113,5 +174,25 @@ class RequestController extends Controller
         if ($req->delete()){
             return new RequestResource($req);
         }
+    }
+
+    public function requestsbyuser($id){
+        $requests = RM::where('userid', $id)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
+        return new RequestResource($requests);
+    }
+
+    public function requestsbyprovider($id){
+        $requests = RM::where('providerid', $id)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
+        return new RequestResource($requests);
+    }
+
+    public function filterrequests(Request $request){
+        $request->validate([
+            'filter' => 'required',
+            'key' => 'required'
+        ]);
+        
+        $requests = RM::where($request->filter, $request->key)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
+        return new RequestResource($requests);
     }
 }

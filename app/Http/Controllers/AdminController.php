@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Log;
 use Illuminate\Http\Request;
 use App\Admin;
 use App\Http\Resources\AdminResource;
@@ -37,11 +38,26 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+        Log::debug(is_array($request->subno));
         $admin = $request->isMethod('put') ? Admin::findOrFail
         ($request->id) : new Admin;
         
-        $admin->username = $request->input('username');
-        $admin->password = $request->input('password');
+        if (empty($request->input('username'))) {
+            return [
+                'Message'=>'username is required.'
+            ];
+        }
+        else {
+            $admin->username = $request->input('username');
+        }
+        if (empty($request->input('password'))) {
+            return [
+                'Message'=>'password is required.'
+            ];
+        }
+        else {
+            $admin->password = $request->input('password');
+        }
         $admin->phonenumber = $request->input('phonenumber');
         $admin->role = $request->input('role');
         $admin->area = $request->input('area');

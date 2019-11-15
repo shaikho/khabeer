@@ -40,9 +40,33 @@ class ServiceProvidorController extends Controller
         $serviceprovider = $request->isMethod('put') ? ServiceProvidor::findOrFail
         ($request->id) : new ServiceProvidor;
         
-        $serviceprovider->username = $request->input('username');
-        $serviceprovider->phonenumber = $request->input('phonenumber');
-        $serviceprovider->password = $request->input('password');
+        //$serviceprovider->username = $request->input('username');
+        if (!empty($request->input('username'))) {
+            $serviceprovider->username = $request->input('username');
+        }
+        else {
+            return [
+                'Message'=>'username is required.'
+            ];
+        }
+        //$serviceprovider->phonenumber = $request->input('phonenumber');
+        if (!empty($request->input('phonenumber'))) {
+            $serviceprovider->phonenumber = $request->input('phonenumber');
+        }
+        else {
+            return [
+                'Message'=>'phonenumber is required.'
+            ];
+        }
+        //$serviceprovider->password = $request->input('password');
+        if (!empty($request->input('password'))) {
+            $serviceprovider->password = $request->input('password');
+        }
+        else {
+            return [
+                'Message'=>'password is required.'
+            ];
+        }
         $serviceprovider->buildingno = $request->input('buildingno');
         $serviceprovider->unitno = $request->input('unitno');
         $serviceprovider->docs = $request->input('docs');

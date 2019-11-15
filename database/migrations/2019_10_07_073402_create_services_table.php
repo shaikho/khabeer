@@ -18,8 +18,8 @@ class CreateServicesTable extends Migration
             $table->string('servicename');
             $table->string('servicenamearabic');
             $table->string('description');
-            $table->string('arabicdescription');
-            $table->string('iconurl');
+            $table->string('arabicdescription')->nullable();
+            $table->string('iconurl')->nullable();
             $table->timestamps();
         });
     }
