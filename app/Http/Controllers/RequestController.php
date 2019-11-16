@@ -191,8 +191,20 @@ class RequestController extends Controller
             'filter' => 'required',
             'key' => 'required'
         ]);
-        
+
         $requests = RM::where($request->filter, $request->key)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
+        return new RequestResource($requests);
+    }
+
+    public function filterrequestsbytwo(Request $request){
+        $request->validate([
+            'filter' => 'required',
+            'key' => 'required',
+            'alsofilter' => 'required',
+            'alsokey' => 'required'
+        ]);
+        
+        $requests = RM::where($request->filter, $request->key)->where($request->alsofilter,$request->alsokey)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
         return new RequestResource($requests);
     }
 }

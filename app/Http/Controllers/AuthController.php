@@ -71,10 +71,10 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'username' => 'required|string',
+            'phonenumber' => 'required|string',
             'password' => 'required|string'
         ]);
-        $credentials = request(['username', 'password']);
+        $credentials = request(['phonenumber', 'password']);
         if(!Auth::attempt($credentials))
             return response()->json([
                 'message' => 'Unauthorized'
