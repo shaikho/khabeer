@@ -66,6 +66,14 @@ return [
     */
 
     'providers' => [
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Admin::class,
+        ],
+        'serviceproviders' => [
+            'driver' => 'eloquent',
+            'model' => App\ServiceProvidor::class,
+        ],
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,

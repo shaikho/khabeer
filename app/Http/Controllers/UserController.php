@@ -70,6 +70,7 @@ class UserController extends Controller
         $user->profileimg = $request->input('profileimg');
         $user->location = $request->input('location');
         $user->role = $request->input('role');
+        $user->rate = $request->input('rate');
         $user->active = $request->input('active');
         $user->serviceproviderid = $request->input('serviceproviderid');
         $user->balance = $request->input('balance');

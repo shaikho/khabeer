@@ -1,9 +1,13 @@
 <?php
 namespace App\Http\Controllers;
+
+use App\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\User;
+use App\ServiceProvidor;
+use Hash;
 
 //use DebugBar\DebugBar;
 
@@ -90,12 +94,79 @@ class AuthController extends Controller
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
             'userid' => $user->id,
-        'role' => $user->role,
+            'role' => $user->role,
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString()
         ]);
     }
+
+    public function adminslogin(Request $request){
+        $request->validate([
+            'phonenumber' => 'required',
+            'password' => 'required'
+        ]);
+        // get user object
+        $user = Admin::where('phonenumber', request()->phonenumber)->first();
+        if (!empty($user->phonenumber)) {
+            if (!empty($user->password)) {
+                // log the user in (needed for future requests)
+                Auth::login($user);
+                // get new token
+                $tokenResult = $user->createToken('Personal Access Token');
+                // return token in json response
+                return response()->json([
+                    'access_token' => $tokenResult->accessToken,
+                    'token_type' => 'Bearer',
+                    'id' => $user->id,
+                    'role' => $user->role,
+                    'expires_at' => Carbon::parse(
+                        $tokenResult->token->expires_at
+                    )->toDateTimeString()
+                ]);
+            }
+            else {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+        }
+        else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    }
+
+    public function serviceprovidorslogin(Request $request){
+        $request->validate([
+            'phonenumber' => 'required',
+            'password' => 'required'
+        ]);
+        // get user object
+        $user = ServiceProvidor::where('phonenumber', request()->phonenumber)->first();
+        if (!empty($user->phonenumber)) {
+            if (!empty($user->password)) {
+                // log the user in (needed for future requests)
+                Auth::login($user);
+                // get new token
+                $tokenResult = $user->createToken('Personal Access Token');
+                // return token in json response
+                return response()->json([
+                    'access_token' => $tokenResult->accessToken,
+                    'token_type' => 'Bearer',
+                    'providerid' => $user->id,
+                    'role' => $user->role,
+                    'expires_at' => Carbon::parse(
+                        $tokenResult->token->expires_at
+                    )->toDateTimeString()
+                ]);
+            }
+            else {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+        }
+        else {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    }
+
   
     /**
      * Logout user (Revoke the token)

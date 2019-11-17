@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('profileimg')->nullable();
             $table->string('location')->nullable();
             $table->string('role')->nullable();
+            $table->string('rate')->nullable();
             $table->string('code')->nullable();
             $table->string('active')->nullable();
             $table->string('serviceproviderid')->nullable();

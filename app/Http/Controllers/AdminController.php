@@ -58,9 +58,33 @@ class AdminController extends Controller
         else {
             $admin->password = $request->input('password');
         }
-        $admin->phonenumber = $request->input('phonenumber');
-        $admin->role = $request->input('role');
-        $admin->area = $request->input('area');
+        //$admin->phonenumber = $request->input('phonenumber');
+        if (empty($request->input('phonenumber'))) {
+            return [
+                'Message'=>'phonenumber is required.'
+            ];
+        }
+        else {
+            $admin->phonenumber = $request->input('phonenumber');
+        }
+        //$admin->role = $request->input('role');
+        if (empty($request->input('role'))) {
+            return [
+                'Message'=>'role is required.'
+            ];
+        }
+        else {
+            $admin->role = $request->input('role');
+        }
+        //$admin->area = $request->input('area');
+        if (empty($request->input('area'))) {
+            return [
+                'Message'=>'area is required.'
+            ];
+        }
+        else {
+            $admin->area = $request->input('area');
+        }
 
         if($admin->save()){
             return new AdminResource($admin);
