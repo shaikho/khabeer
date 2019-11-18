@@ -89,6 +89,7 @@ class AdminController extends Controller
         if($admin->save()){
             return new AdminResource($admin);
         }
+        $admin->profileimg = $request->input('profileimg');
     }
 
     /**
