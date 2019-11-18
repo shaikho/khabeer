@@ -139,4 +139,23 @@ class ServiceProvidorController extends Controller
             return new ServiceProvidorResource($serviceprovider);
         }
     }
+
+    public function rate(Request $request,$id){
+        $rate = 0;$count = 0;
+        $request->validate([
+            'rate'=>'required'
+        ]);
+        $serviceprovider = ServiceProvidor::findOrFail($id);
+        $oldrating = $serviceprovider->rate;
+        $passedrating = $request->rate;
+        $token = strtok($oldrating, ",");
+        $count = $token;
+        $token = strtok(",");
+        $rate = $token;
+        $result = $count*$rate+5/$count+1;
+        echo $result;
+        echo "\nThe rate is : " . $rate  . "\n";
+        echo "The count is : " . $count;
+    }
+    
 }
