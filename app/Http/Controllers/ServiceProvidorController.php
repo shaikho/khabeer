@@ -157,9 +157,5 @@ class ServiceProvidorController extends Controller
         echo "\nThe rate is : " . $rate  . "\n";
         echo "The count is : " . $count;
     }
-
-    public function uploadprofileimg(Request $request) {
-        
-    }
     
 }

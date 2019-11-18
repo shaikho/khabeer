@@ -149,4 +149,8 @@ class UserController extends Controller
             'otp' => $otp
         ], 201);
     }
+
+    public function uploadprofileimg(Request $request) {
+        
+    }
 }
