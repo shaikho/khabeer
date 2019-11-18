@@ -51,7 +51,7 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::put('serviceprovidor','ServiceProvidorController@store');
       Route::delete('serviceprovidor/{id}','ServiceProvidorController@destroy');
       Route::post('rateserviceprovidor/{id}','ServiceProvidorController@rate');
-      Route::post('uploadprofileimg/{id}','ServiceProvidorController@uploadprofileimg');
+      Route::post('uploadprovidorprofileimg/{id}','ServiceProvidorController@uploadprofileimg');
       //requests
       Route::get('requests','RequestController@index');
       Route::get('request/{id}','RequestController@show');
@@ -69,14 +69,14 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::put('user','UserController@store');
       Route::delete('user/{id}','UserController@destroy');
       Route::get('otpuser','UserController@otpuser');
-      Route::post('uploadprofileimg/{id}','UserController@uploadprofileimg');
+      Route::post('uploaduserprofileimg/{id}','UserController@uploadprofileimg');
       //admins
       Route::get('admins','AdminController@index');
       Route::get('admin/{id}','AdminController@show');
       Route::post('admin','AdminController@store');
       Route::put('admin','AdminController@store');
       Route::delete('admin/{id}','AdminController@destroy');
-      Route::post('uploadprofileimg/{id}','AdminController@uploadprofileimg');
+      Route::post('uploadadminprofileimg/{id}','AdminController@uploadprofileimg');
       //testing
   });
 
