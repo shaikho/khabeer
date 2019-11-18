@@ -99,7 +99,7 @@ class ServiceProvidorController extends Controller
     public function show($id)
     {
         $serviceprovider = ServiceProvidor::findOrFail($id);
-        return new UserResource($serviceprovider);
+        return new ServiceProvidorResource($serviceprovider);
     }
 
     /**
