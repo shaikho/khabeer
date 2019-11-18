@@ -158,7 +158,7 @@ class ServiceProvidorController extends Controller
         echo "The count is : " . $count;
     }
 
-    public function demonistrationmethod(){
+    public function uploadprofileimg(Request $request) {
         
     }
     
