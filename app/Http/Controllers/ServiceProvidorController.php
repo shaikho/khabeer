@@ -141,10 +141,11 @@ class ServiceProvidorController extends Controller
     }
 
     public function rate(Request $request,$id){
-        $rate = 0;$count = 0;
+        $rate = 0;$count = 0;$newcount = 0;
         $request->validate([
             'rate'=>'required'
         ]);
+
         $serviceprovider = ServiceProvidor::findOrFail($id);
         $oldrating = $serviceprovider->rate;
         $passedrating = $request->rate;
@@ -152,10 +153,16 @@ class ServiceProvidorController extends Controller
         $count = $token;
         $token = strtok(",");
         $rate = $token;
-        $result = $count*$rate+5/$count+1;
-        echo $result;
-        echo "\nThe rate is : " . $rate  . "\n";
-        echo "The count is : " . $count;
+        $newcount = $count + 1;
+        $result = $count*$rate;
+        $result = $result+$passedrating;
+        $result = $result/$newcount;
+        $serviceprovider->rate = $newcount . "," .substr($result,0,4);
+        $serviceprovider->update();
+        return response()->json([
+            'count'=> $newcount,
+            'rate'=> substr($result,0,4)            
+        ],200);
     }
 
     public function uploadprofileimg(Request $request,$id) {

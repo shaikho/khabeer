@@ -35,20 +35,20 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::get('subservices','SubServiceController@index');
       Route::get('subservice/{id}','SubServiceController@show');
       Route::post('subservice','SubServiceController@store');
-      Route::put('subservice','SubServiceController@store');
+      Route::put('subservice/{id}','SubServiceController@store');
       Route::delete('subservice/{id}','SubServiceController@destroy');
       Route::get('subservicesbyparent/{id}','SubServiceController@filteredsubservices');
       //services
       Route::get('services','ServiceController@index');
       Route::get('service/{id}','ServiceController@show');
       Route::post('service','ServiceController@store');
-      Route::put('service','ServiceController@store');
+      Route::put('service/{id}','ServiceController@store');
       Route::delete('service/{id}','ServiceController@destroy');
       //servicesprovidors
       Route::get('serviceprovidors','ServiceProvidorController@index');
       Route::get('serviceprovidor/{id}','ServiceProvidorController@show');
       Route::post('serviceprovidor','ServiceProvidorController@store');
-      Route::put('serviceprovidor','ServiceProvidorController@store');
+      Route::put('serviceprovidor/{id}','ServiceProvidorController@store');
       Route::delete('serviceprovidor/{id}','ServiceProvidorController@destroy');
       Route::post('rateserviceprovidor/{id}','ServiceProvidorController@rate');
       Route::post('uploadprovidorprofileimg/{id}','ServiceProvidorController@uploadprofileimg');
@@ -56,7 +56,7 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::get('requests','RequestController@index');
       Route::get('request/{id}','RequestController@show');
       Route::post('request','RequestController@store');
-      Route::put('request','RequestController@store');
+      Route::put('request/{id}','RequestController@store');
       Route::delete('request/{id}','RequestController@destroy');
       Route::get('userrequests/{id}','RequestController@requestsbyuser');
       Route::get('providerrequests/{id}','RequestController@requestsbyprovider');
@@ -66,15 +66,16 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::get('users','UserController@index');
       Route::get('user/{id}','UserController@show');
       Route::post('user','UserController@store');
-      Route::put('user','UserController@store');
+      Route::put('user/{id}','UserController@store');
       Route::delete('user/{id}','UserController@destroy');
       Route::get('otpuser','UserController@otpuser');
       Route::post('uploaduserprofileimg/{id}','UserController@uploadprofileimg');
+      Route::post('rateuser/{id}','UserController@rate');
       //admins
       Route::get('admins','AdminController@index');
       Route::get('admin/{id}','AdminController@show');
       Route::post('admin','AdminController@store');
-      Route::put('admin','AdminController@store');
+      Route::put('admin/{id}','AdminController@store');
       Route::delete('admin/{id}','AdminController@destroy');
       Route::post('uploadadminprofileimg/{id}','AdminController@uploadprofileimg');
       //testing

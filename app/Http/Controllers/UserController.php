@@ -159,4 +159,29 @@ class UserController extends Controller
             'url'=> $photoURL
         ],200);
     }
+
+    public function rate(Request $request,$id){
+        $rate = 0;$count = 0;$newcount = 0;
+        $request->validate([
+            'rate'=>'required'
+        ]);
+
+        $user = User::findOrFail($id);
+        $oldrating = $user->rate;
+        $passedrating = $request->rate;
+        $token = strtok($oldrating, ",");
+        $count = $token;
+        $token = strtok(",");
+        $rate = $token;
+        $newcount = $count + 1;
+        $result = $count*$rate;
+        $result = $result+$passedrating;
+        $result = $result/$newcount;
+        $user->rate = $newcount . "," .substr($result,0,4);
+        $user->update();
+        return response()->json([
+            'count'=> $newcount,
+            'rate'=> substr($result,0,4)            
+        ],200);
+    }
 }
