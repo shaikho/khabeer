@@ -140,4 +140,14 @@ class AdminController extends Controller
             return new ServiceResource($admin);
         }
     }
+
+    public function uploadprofileimg(Request $request,$id) {
+        $user = User::findOrFail($id);
+        $filename = $user->username . $user->phonenumber . ".jpg";
+        $path = $request->file('photo')->move(public_path("uploads/"),$filename);
+        $photoURL = url('uploads/'.$filename);
+        return response()->json([
+            'url'=> $photoURL
+        ],200);
+    }
 }

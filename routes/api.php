@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::put('serviceprovidor','ServiceProvidorController@store');
       Route::delete('serviceprovidor/{id}','ServiceProvidorController@destroy');
       Route::post('rateserviceprovidor/{id}','ServiceProvidorController@rate');
+      Route::post('uploadprofileimg/{id}','ServiceProvidorController@uploadprofileimg');
       //requests
       Route::get('requests','RequestController@index');
       Route::get('request/{id}','RequestController@show');
@@ -75,6 +76,7 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::post('admin','AdminController@store');
       Route::put('admin','AdminController@store');
       Route::delete('admin/{id}','AdminController@destroy');
+      Route::post('uploadprofileimg/{id}','AdminController@uploadprofileimg');
       //testing
   });
 
