@@ -68,7 +68,7 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::put('user','UserController@store');
       Route::delete('user/{id}','UserController@destroy');
       Route::get('otpuser','UserController@otpuser');
-      Route::post('uploadprofileimg','UserController@uploadprofileimg');
+      Route::post('uploadprofileimg/{id}','UserController@uploadprofileimg');
       //admins
       Route::get('admins','AdminController@index');
       Route::get('admin/{id}','AdminController@show');

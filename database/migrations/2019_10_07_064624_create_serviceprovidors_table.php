@@ -18,7 +18,7 @@ class CreateServiceprovidorsTable extends Migration
         Schema::create('service_providors', function (Blueprint $table) {
             $table->Increments('id');
             $table->string('username');
-            $table->string('phonenumber')->uniqid();
+            $table->string('phonenumber')->unique();
             $table->string('password')->nullable();
             $table->string('buildingno')->nullable();
             $table->string('unitno')->nullable();
