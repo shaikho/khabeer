@@ -36,29 +36,30 @@ class AuthController extends Controller
             'profileimg' => $request->profileimg,
             'role' => $request->role,
             'code' => $request->code,
-            'active' => $request->active,
+            //'active' => $request->$inactive,
             'serviceproviderid' => $request->serviceproviderid,
             'balance' => $request->balance,
         ]);
         $user->save();
-
+        $user = User::findOrFail($user->id);
         $otp = rand(100000,999999);
-        //$messageloadtobesent='';
-        //$usernumber = $request->phonenumber;
-        //$client = new \GuzzleHttp\Client(); 
-        //$sentrequest = "https://www.hisms.ws/api.php?send_sms&username=966500253832&password=0919805287&numbers={$usernumber}&sender=khabir&message={$otp}";
-        //$res = $client->get($sentrequest);
-        //$result = $res->getBody();
-        //if (substr($result,0,1) == '3'){
-        //    $messageloadtobesent = 'Message sent!';
-        //}
-        //else {
-        //    $messageloadtobesent = 'Message not sent!';
-        //}
+        $messageloadtobesent='';
+        $usernumber = $request->phonenumber;
+        $client = new \GuzzleHttp\Client(); 
+        $sentrequest = "https://www.hisms.ws/api.php?send_sms&username=966500253832&password=0919805287&numbers={$usernumber}&sender=khabir&message={$otp}";
+        $res = $client->get($sentrequest);
+        $result = $res->getBody();
+        if (substr($result,0,1) == '3'){
+            $messageloadtobesent = 'Message sent!';
+        }
+        else {
+            $messageloadtobesent = 'Message not sent!';
+        }
         return response()->json([
             'userstatus' => 'Successfully created user!',
-            //'messagestatus' => $messageloadtobesent,
-            'otp' => $otp
+            'messagestatus' => $messageloadtobesent,
+            'otp' => $otp,
+            'userid' => $user->id
         ], 201);
     }
   
