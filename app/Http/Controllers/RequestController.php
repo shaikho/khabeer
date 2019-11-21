@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\JobRequest;
 use App\Http\Requsts;
 use App\RM;
+use DB;
 use Illuminate\Http\Request;
 use App\Http\Resources\RequestResource as RequestResource;
 
@@ -192,7 +193,11 @@ class RequestController extends Controller
             'key' => 'required'
         ]);
 
-        $requests = RM::where($request->filter, $request->key)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
+        //$requests = RM::where($request->filter, $request->key)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
+        $requests = DB::table('r_m_s')
+        ->select('r_m_s.id','r_m_s.subno', 'r_m_s.subserviceprice','r_m_s.subservicename','r_m_s.subservicearabicname','r_m_s.enddate','r_m_s.userid','r_m_s.providerid','r_m_s.location','r_m_s.subserviceslug','r_m_s.cancelled','r_m_s.cancelmessage','r_m_s.status','r_m_s.user_lang','r_m_s.userauth','r_m_s.providorlang','r_m_s.providorauth','r_m_s.created_at','r_m_s.updated_at','sub_services.iconurl')
+        ->join('sub_services','sub_services.id','=','r_m_s.subno');
+        
         return new RequestResource($requests);
     }
 
