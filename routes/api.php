@@ -71,6 +71,7 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::get('otpuser','UserController@otpuser');
       Route::post('uploaduserprofileimg/{id}','UserController@uploadprofileimg');
       Route::post('rateuser/{id}','UserController@rate');
+      Route::post('notifyuser','UserController@notifyuser');
       //admins
       Route::get('admins','AdminController@index');
       Route::get('admin/{id}','AdminController@show');
@@ -78,6 +79,7 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::put('admin','AdminController@store');
       Route::delete('admin/{id}','AdminController@destroy');
       Route::post('uploadadminprofileimg/{id}','AdminController@uploadprofileimg');
+      Route::post('iconsupload/{id}','AdminController@uploadicon');
       //testing
   });
 

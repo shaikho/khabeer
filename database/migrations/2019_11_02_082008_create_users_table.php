@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('active')->nullable();
             $table->string('serviceproviderid')->nullable();
             $table->string('balance')->nullable();
+            $table->string('notification_token');
             $table->timestamps();
         });
     }

@@ -184,4 +184,31 @@ class UserController extends Controller
             'rate'=> substr($result,0,4)            
         ],200);
     }
+
+    public function notifyuser(Request $request){
+
+        $client = new \GuzzleHttp\Client(['headers' => ['Authorization' => 'key=AAAA_zwre0s:APA91bFD9MhifoGNK0AXJp-ejWTwBpLIFL45xAku_YgaCMp00Wan5CCI1QrqwnmCKGK-DPWDmnqnr0w3L7wmizfmk5r-uloPKx1dgRYpGZ9Xsz3veFF2ZxZ_vI0zSU-DU5qDPNMll1gQ'],['Content-Type' => 'application/json']]); 
+        $sentrequest = "https://fcm.googleapis.com/fcm/send";
+        $res = $client->post($sentrequest,[
+            'json' => [
+                'to' => 'dVCcZW0eY_IdQ2FzR6ocfs:APA91bGFMxrCo8_qAYQIeciklIAeLmlSZ_WUsFzbcaxyUPVHNAH0kxZQPNYe6PHTtrAjDimwurQ_elhllJu2zXV_7wVmep8sT1fk1KmT6ekeDk6pMjyYKXWRIrpW4mC9C0IO3pknxgEz',
+                'notification' => [
+                    'body' => 'inside the app !',
+                    'title' => 'Portugal vs. Denmark',
+                    'content_available' => true,
+                    'priority' => "high"
+                ],
+                'data' => [
+                    'body' => 'inside the app !',
+                    'title' => 'Portugal vs. Denmark',
+                    'content_available' => true,
+                    'priority' => "high"
+                ],
+            ]
+        ]);
+        $result = $res->getBody();
+        return response()->json([
+            'body' => $result
+        ], 201);
+    }
 }

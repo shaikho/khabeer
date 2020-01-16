@@ -151,4 +151,13 @@ class AdminController extends Controller
             'url'=> $photoURL
         ],200);
     }
+
+    public function uploadicon(Request $request,$id) {
+        $filename = $id . ".jpg";
+        $path = $request->file('photo')->move(public_path("uploads/"),$filename);
+        $photoURL = url('uploads/'.$filename);
+        return response()->json([
+            'url'=> $photoURL
+        ],200);
+    }
 }

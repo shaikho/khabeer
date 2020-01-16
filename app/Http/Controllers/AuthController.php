@@ -28,6 +28,7 @@ class AuthController extends Controller
             'username' => 'required|string',
             'password' => 'required|string',
             'phonenumber' => 'required|unique:users',
+            'notification_token' => 'required|string'
         ]);
         $user = new User([
             'username' => $request->username,
@@ -39,13 +40,14 @@ class AuthController extends Controller
             //'active' => $request->$inactive,
             'serviceproviderid' => $request->serviceproviderid,
             'balance' => $request->balance,
+            'notification_token' => $request->notification_token
         ]);
         $user->save();
         $user = User::findOrFail($user->id);
         $otp = rand(100000,999999);
         $messageloadtobesent='';
         $usernumber = $request->phonenumber;
-        $client = new \GuzzleHttp\Client(); 
+        $client = new \GuzzleHttp\Client();
         $sentrequest = "https://www.hisms.ws/api.php?send_sms&username=966500253832&password=0919805287&numbers={$usernumber}&sender=khabir&message={$otp}";
         $res = $client->get($sentrequest);
         $result = $res->getBody();
@@ -62,7 +64,7 @@ class AuthController extends Controller
             'userid' => $user->id
         ], 201);
     }
-  
+
     /**
      * Login user and create token
      *
@@ -77,7 +79,8 @@ class AuthController extends Controller
     {
         $request->validate([
             'phonenumber' => 'required|string',
-            'password' => 'required|string'
+            'password' => 'required|string',
+            'notification_token' => 'required|string'
         ]);
         $credentials = request(['phonenumber', 'password']);
         if(!Auth::attempt($credentials))
@@ -85,6 +88,7 @@ class AuthController extends Controller
                 'message' => 'Unauthorized'
             ], 401);
         $user = $request->user();
+        //updating notification token in here
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
         if ($request->remember_me)
@@ -138,7 +142,8 @@ class AuthController extends Controller
     public function serviceprovidorslogin(Request $request){
         $request->validate([
             'phonenumber' => 'required',
-            'password' => 'required'
+            'password' => 'required',
+            'notification_token' => 'notification_token'
         ]);
         // get user object
         $user = ServiceProvidor::where('phonenumber', request()->phonenumber)->first();
@@ -149,6 +154,7 @@ class AuthController extends Controller
                 // get new token
                 $tokenResult = $user->createToken('Personal Access Token');
                 // return token in json response
+                //updating notification token in here
                 return response()->json([
                     'access_token' => $tokenResult->accessToken,
                     'token_type' => 'Bearer',
@@ -168,7 +174,7 @@ class AuthController extends Controller
         }
     }
 
-  
+
     /**
      * Logout user (Revoke the token)
      *
@@ -181,7 +187,7 @@ class AuthController extends Controller
             'message' => 'Successfully logged out'
         ]);
     }
-  
+
     /**
      * Get the authenticated User
      *

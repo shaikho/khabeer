@@ -67,6 +67,14 @@ class ServiceProvidorController extends Controller
                 'Message'=>'password is required.'
             ];
         }
+        if (!empty($request->input('notification_token'))) {
+            $serviceprovider->notification_token = $request->input('notification_token');
+        }
+        else {
+            return [
+                'Message'=>'notification_token is required.'
+            ];
+        }
         $serviceprovider->buildingno = $request->input('buildingno');
         $serviceprovider->unitno = $request->input('unitno');
         $serviceprovider->docs = $request->input('docs');
