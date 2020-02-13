@@ -129,14 +129,22 @@ class RequestController extends Controller
             $title = 'Your request has been approved';
             $body = 'Your requested service has been accepted by service provider ';
             $this->pushnotificationtocustomer($request->userid,$request->providerid,$title,$body);
-        }else if($request->status == 'finished'){
-            $title = 'Your request has been completed';
-            $body = 'Required payment is  ' . $request->subserviceprive . ' thank you for using our services';
+        }else if($request->status == 'waitingPayment'){
+            $title = 'Payment required';
+            $body = 'Required payment is  ' . $request->subserviceprice . ' thank you for using our services';
             $this->pushnotificationtocustomer($request->userid,$request->providerid,$title,$body);
-        }else if($request->status == 'payed'){
+        }else if($request->status == 'finished'){
             $title = 'Job completed';
-            $body = 'Job completed Successfully thank you ';
+            $body = 'Job has been completed successfully';
+            $this->pushnotificationtocustomer($request->userid,$request->providerid,$title,$body);
+        }else if($request->status == 'paymentConfirmed'){
+            $title = 'Payment Confirmed';
+            $body = 'Customer has confirmed your payment';
             $this->pushnotificationtoprovider($request->userid,$request->providerid,$title,$body);
+        }else if($request->status == 'payed'){
+            $title = 'Payment Completed';
+            $body = 'Job payment completed';
+            $this->pushnotificationtocustomer($request->userid,$request->providerid,$title,$body);
         }
         //
 
