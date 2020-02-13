@@ -30,6 +30,7 @@ class AuthController extends Controller
             'phonenumber' => 'required|unique:users',
             'notification_token' => 'required|string'
         ]);
+
         $user = new User([
             'username' => $request->username,
             'password' => bcrypt($request->password),
@@ -88,6 +89,8 @@ class AuthController extends Controller
                 'message' => 'Unauthorized'
             ], 401);
         $user = $request->user();
+        //$user->notfication_token = $request->notification_token;
+        //$user->update();
         //updating notification token in here
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
