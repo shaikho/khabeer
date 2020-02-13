@@ -134,7 +134,7 @@ class RequestController extends Controller
             $body = 'Required payment is  ' . $request->subserviceprice . ' thank you for using our services';
             $this->pushnotificationtocustomer($request->userid,$request->providerid,$title,$body);
         }else if($request->status == 'finished'){
-            $title = 'Job completed';
+            $title = 'Jo b completed';
             $body = 'Job has been completed successfully';
             $this->pushnotificationtocustomer($request->userid,$request->providerid,$title,$body);
         }else if($request->status == 'paymentConfirmed'){
