@@ -89,6 +89,8 @@ class AuthController extends Controller
                 'message' => 'Unauthorized'
             ], 401);
         $user = $request->user();
+        $user->notification_token = $request->notification_tokenl;
+        $user->save();
         //$user->notfication_token = $request->notification_token;
         //$user->update();
         //updating notification token in here
