@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
+header('Access-Control-Allow-Origin: *');
+header( 'Access-Control-Allow-Headers: Authorization, Content-Type' );
+
 Route::group(['prefix' => 'auth','cors'], function () {
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup');

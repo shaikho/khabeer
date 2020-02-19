@@ -12,6 +12,6 @@ class ServiceProvidor extends Authenticatable
     use Notifiable,HasApiTokens;
 
     protected $fillable = [
-        'username', 'phonenumber', 'buildingno','unitno','docs','profileimg','role','postalcode', 'neighborhood','nationalid','nationaladdress','rate','clients','type','approved','code','active','requestid','subserviceid','notification_token'
+        'username', 'phonenumber', 'buildingno','unitno','docs','profileimg','role','postalcode', 'neighborhood','nationalid','nationaladdress','rate','clients','type','approved','code','active','requestid','subserviceid','credit','notification_token'
     ];
 }

@@ -37,6 +37,7 @@ class CreateServiceprovidorsTable extends Migration
             $table->string('active')->nullable();
             $table->string('requestid')->nullable();
             $table->string('subserviceid')->nullable();
+            $table->string('credit')->nullable();
             $table->string('notification_token');
             $table->timestamps();
         });
