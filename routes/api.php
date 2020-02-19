@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['prefix' => 'auth'], function () {
+Route::group(['prefix' => 'auth','cors'], function () {
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup');
     Route::post('adminslogin', 'AuthController@adminslogin');
@@ -28,7 +28,7 @@ Route::group(['middleware' => ['auth.serviceprovidors','auth:api']], function() 
 
 });
 
-Route::group(['middleware' => 'auth:api'], function() {
+Route::group(['middleware' => 'auth:api','cors'], function() {
       Route::get('user', 'AuthController@user');
       Route::get('logout', 'AuthController@logout');
       //subservices
