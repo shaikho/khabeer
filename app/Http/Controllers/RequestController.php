@@ -129,22 +129,14 @@ class RequestController extends Controller
             $title = 'Your request has been approved';
             $body = 'Your requested service has been accepted by service provider ';
             $this->pushnotificationtocustomer($request->userid,$request->providerid,$title,$body);
-        }else if($request->status == 'waitingPayment'){
-            $title = 'Payment required';
-            $body = 'Required payment is  ' . $request->subserviceprice . ' thank you for using our services';
-            $this->pushnotificationtocustomer($request->userid,$request->providerid,$title,$body);
         }else if($request->status == 'finished'){
-            $title = 'Jo b completed';
-            $body = 'Job has been completed successfully';
+            $title = 'Your request has been completed';
+            $body = 'Required payment is  ' . $request->subserviceprive . ' thank you for using our services';
             $this->pushnotificationtocustomer($request->userid,$request->providerid,$title,$body);
-        }else if($request->status == 'paymentConfirmed'){
-            $title = 'Payment Confirmed';
-            $body = 'Customer has confirmed your payment';
-            $this->pushnotificationtoprovider($request->userid,$request->providerid,$title,$body);
         }else if($request->status == 'payed'){
-            $title = 'Payment Completed';
-            $body = 'Job payment completed';
-            $this->pushnotificationtocustomer($request->userid,$request->providerid,$title,$body);
+            $title = 'Job completed';
+            $body = 'Job completed Successfully thank you ';
+            $this->pushnotificationtoprovider($request->userid,$request->providerid,$title,$body);
         }
         //
 
@@ -223,19 +215,7 @@ class RequestController extends Controller
         // $requests = DB::table('r_m_s')
         // ->select('r_m_s.id','r_m_s.subno', 'r_m_s.subserviceprice','r_m_s.subservicename','r_m_s.subservicearabicname','r_m_s.enddate','r_m_s.userid','r_m_s.providerid','r_m_s.location','r_m_s.subserviceslug','r_m_s.cancelled','r_m_s.cancelmessage','r_m_s.status','r_m_s.user_lang','r_m_s.userauth','r_m_s.providorlang','r_m_s.providorauth','r_m_s.created_at','r_m_s.updated_at','sub_services.iconurl')
         // ->join('sub_services','sub_services.id','=','r_m_s.subno');
-        
-        // if($requests->first()){
-        //     // return response()->json([
-        //     //     'data' => $new RequestResource($requests);
-        //     // ],200);
-        //     return new RequestResource($requests);
-        // }
-        // else
-        // {
-        //     return response()->json([
-        //         'data' => []
-        //     ],200);
-        // }  
+
         return new RequestResource($requests);
     }
 

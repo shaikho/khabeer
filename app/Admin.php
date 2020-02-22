@@ -13,6 +13,6 @@ class Admin extends Authenticatable
     use Notifiable,HasApiTokens;
     
     protected $fillable = [
-        'username','password','phonenumber','role','area'
+        'username','password','phonenumber','profileimg','role','area'
     ];
 }

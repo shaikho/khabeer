@@ -30,7 +30,6 @@ class AuthController extends Controller
             'phonenumber' => 'required|unique:users',
             'notification_token' => 'required|string'
         ]);
-
         $user = new User([
             'username' => $request->username,
             'password' => bcrypt($request->password),
@@ -89,10 +88,6 @@ class AuthController extends Controller
                 'message' => 'Unauthorized'
             ], 401);
         $user = $request->user();
-        $user->notification_token = $request->notification_token;
-        $user->save();
-        //$user->notfication_token = $request->notification_token;
-        //$user->update();
         //updating notification token in here
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
@@ -148,7 +143,7 @@ class AuthController extends Controller
         $request->validate([
             'phonenumber' => 'required',
             'password' => 'required',
-            'notification_token' => 'required'
+            'notification_token' => 'notification_token'
         ]);
         // get user object
         $user = ServiceProvidor::where('phonenumber', request()->phonenumber)->first();
@@ -159,8 +154,6 @@ class AuthController extends Controller
                 // get new token
                 $tokenResult = $user->createToken('Personal Access Token');
                 // return token in json response
-                $user->notification_token = $request->notification_token;
-                $user->save();
                 //updating notification token in here
                 return response()->json([
                     'access_token' => $tokenResult->accessToken,

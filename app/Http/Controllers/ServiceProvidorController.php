@@ -91,9 +91,8 @@ class ServiceProvidorController extends Controller
         $serviceprovider->code = $request->input('code');
         $serviceprovider->active = $request->input('active');
         $serviceprovider->requestid = $request->input('requestid');
-        $serviceprovider->subserviceid = $request->input('subserviceid');
         $serviceprovider->credit = $request->input('credit');
-        $serviceprovider->notification_token = $request->input('notification_token');
+        $serviceprovider->subserviceid = $request->input('subserviceid');
 
         if($serviceprovider->save()){
             return new ServiceProvidorResource($serviceprovider);
