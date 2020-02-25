@@ -88,6 +88,8 @@ class AuthController extends Controller
                 'message' => 'Unauthorized'
             ], 401);
         $user = $request->user();
+        $user->notification_token = $request->notification_token;
+        $user->save();
         //updating notification token in here
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
@@ -115,6 +117,7 @@ class AuthController extends Controller
         $user = Admin::where('phonenumber', request()->phonenumber)->first();
         if (!empty($user->phonenumber)) {
             if (!empty($user->password)) {
+                if ($request->phonenumber == $user->phonenumber && $request->password == $user->password){
                 // log the user in (needed for future requests)
                 Auth::login($user);
                 // get new token
@@ -129,6 +132,9 @@ class AuthController extends Controller
                         $tokenResult->token->expires_at
                     )->toDateTimeString()
                 ]);
+                    }else {
+                        return response()->json(['error' => 'Unauthorized'], 401);
+                    }
             }
             else {
                 return response()->json(['error' => 'Unauthorized'], 401);
@@ -149,8 +155,11 @@ class AuthController extends Controller
         $user = ServiceProvidor::where('phonenumber', request()->phonenumber)->first();
         if (!empty($user->phonenumber)) {
             if (!empty($user->password)) {
-                // log the user in (needed for future requests)
+                if ($request->phonenumber == $user->phonenumber && $request->password == $user->password){
+                    // log the user in (needed for future requests)
                 Auth::login($user);
+                $user->notification_token = $request->notification_token;
+                $user->save();
                 // get new token
                 $tokenResult = $user->createToken('Personal Access Token');
                 // return token in json response
@@ -165,6 +174,10 @@ class AuthController extends Controller
                         $tokenResult->token->expires_at
                     )->toDateTimeString()
                 ]);
+                }
+                else {
+                    return response()->json(['error' => 'Unauthorized'], 401);
+                }
             }
             else {
                 return response()->json(['error' => 'Unauthorized'], 401);
