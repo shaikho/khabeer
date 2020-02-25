@@ -143,7 +143,7 @@ class AuthController extends Controller
         $request->validate([
             'phonenumber' => 'required',
             'password' => 'required',
-            'notification_token' => 'notification_token'
+            'notification_token' => 'required'
         ]);
         // get user object
         $user = ServiceProvidor::where('phonenumber', request()->phonenumber)->first();
