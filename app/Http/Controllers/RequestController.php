@@ -286,4 +286,9 @@ class RequestController extends Controller
                 ]
             ]);
     }
+
+    public function getliverequests(Request $request){
+        $requests = RM::where('startdate', 'NOW')->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','startdate','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
+        return new RequestResource($requests);
+    }
 }

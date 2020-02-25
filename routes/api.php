@@ -64,6 +64,7 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::get('providerrequests/{id}','RequestController@requestsbyprovider');
       Route::post('filterrequests','RequestController@filterrequests');
       Route::post('filterrequestsbytwo','RequestController@filterrequestsbytwo');
+      Route::get('getliverequests','RequestController@getliverequests');
       //users
       Route::get('users','UserController@index');
       Route::get('user/{id}','UserController@show');
