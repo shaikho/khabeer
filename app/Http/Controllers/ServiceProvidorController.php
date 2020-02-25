@@ -182,5 +182,15 @@ class ServiceProvidorController extends Controller
         return response()->json([
             'url'=> $photoURL
         ],200);
-    }    
+    }
+
+    public function filterserviceprovidors(Request $request){
+        $request->validate([
+            'filter' => 'required',
+            'key' => 'required'
+        ]);
+
+        $requests = ServiceProvidor::where($request->filter, $request->key)->get(['id','username', 'phonenumber','password','buildingno','unitno','docs','profileimg','role','postalcode','neighborhood','nationalid','nationaladdress','rate','clients','type','approved','code','active','requestid','subserviceid','credit','notification_token','created_at','updated_at']);
+        return new ServiceProvidorResource($requests);
+    }
 }

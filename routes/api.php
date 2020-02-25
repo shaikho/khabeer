@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::delete('serviceprovidor/{id}','ServiceProvidorController@destroy');
       Route::post('rateserviceprovidor/{id}','ServiceProvidorController@rate');
       Route::post('uploadprovidorprofileimg/{id}','ServiceProvidorController@uploadprofileimg');
+      Route::post('filterprovidors','ServiceProvidorController@filterserviceprovidors');
       //requests
       Route::get('requests','RequestController@index');
       Route::get('request/{id}','RequestController@show');
