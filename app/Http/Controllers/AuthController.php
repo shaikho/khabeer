@@ -122,6 +122,8 @@ class AuthController extends Controller
                 Auth::login($user);
                 // get new token
                 $tokenResult = $user->createToken('Personal Access Token');
+                $token = $tokenResult->token;
+                $token->save();
                 // return token in json response
                 return response()->json([
                     'access_token' => $tokenResult->accessToken,
@@ -162,6 +164,8 @@ class AuthController extends Controller
                 $user->save();
                 // get new token
                 $tokenResult = $user->createToken('Personal Access Token');
+                $token = $tokenResult->token;
+                $token->save();
                 // return token in json response
                 //updating notification token in here
                 return response()->json([

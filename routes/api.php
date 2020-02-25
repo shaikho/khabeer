@@ -13,13 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('serviceprovidor','ServiceProvidorController@store');
-
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup');
     Route::post('adminslogin', 'AuthController@adminslogin');
     Route::post('serviceprovidorslogin', 'AuthController@serviceprovidorslogin');
+    Route::post('serviceprovidor','ServiceProvidorController@store');
 });
 
 Route::group(['middleware' => ['auth.admins','auth:api']], function() {
