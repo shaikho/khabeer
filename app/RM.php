@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class RM extends Model
 {
     protected $fillable = [
-        'subno','subserviceprice','subservicename','subservicearabicname','enddate','userid','providerid','subserviceslug','location','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth'
+        'subno','subserviceprice','subservicename','subservicearabicname','startdate','enddate','userid','providerid','subserviceslug','location','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth'
     ];
 }

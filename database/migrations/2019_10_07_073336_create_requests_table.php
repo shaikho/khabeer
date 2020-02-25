@@ -19,6 +19,7 @@ class CreateRequestsTable extends Migration
             $table->string('subserviceprice');
             $table->string('subservicename')->nullable();
             $table->string('subservicearabicname')->nullable();
+            $table->string('startdate');
             $table->string('enddate');
             $table->string('userid');
             $table->string('providerid');

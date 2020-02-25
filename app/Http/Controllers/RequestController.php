@@ -112,6 +112,14 @@ class RequestController extends Controller
                 'Message'=>'providerid is required.'
             ];
         }
+        if (!empty($request->input('startdate'))) {
+            $req->startdate = $request->input('startdate');
+        }
+        else {
+            return [
+                'Message'=>'startdate is required.'
+            ];
+        }
         $req->subserviceslug = $request->input('subserviceslug');
         $req->cancelled = $request->input('cancelled');
         $req->cancelmessage = $request->input('cancelmessage');
@@ -196,12 +204,12 @@ class RequestController extends Controller
     }
 
     public function requestsbyuser($id){
-        $requests = RM::where('userid', $id)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
+        $requests = RM::where('userid', $id)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','startdate','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
         return new RequestResource($requests);
     }
 
     public function requestsbyprovider($id){
-        $requests = RM::where('providerid', $id)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
+        $requests = RM::where('providerid', $id)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','startdate','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
         return new RequestResource($requests);
     }
 
@@ -211,7 +219,7 @@ class RequestController extends Controller
             'key' => 'required'
         ]);
 
-        $requests = RM::where($request->filter, $request->key)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
+        $requests = RM::where($request->filter, $request->key)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','startdate','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
         // $requests = DB::table('r_m_s')
         // ->select('r_m_s.id','r_m_s.subno', 'r_m_s.subserviceprice','r_m_s.subservicename','r_m_s.subservicearabicname','r_m_s.enddate','r_m_s.userid','r_m_s.providerid','r_m_s.location','r_m_s.subserviceslug','r_m_s.cancelled','r_m_s.cancelmessage','r_m_s.status','r_m_s.user_lang','r_m_s.userauth','r_m_s.providorlang','r_m_s.providorauth','r_m_s.created_at','r_m_s.updated_at','sub_services.iconurl')
         // ->join('sub_services','sub_services.id','=','r_m_s.subno');
@@ -227,7 +235,7 @@ class RequestController extends Controller
             'alsokey' => 'required'
         ]);
 
-        $requests = RM::where($request->filter, $request->key)->where($request->alsofilter,$request->alsokey)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
+        $requests = RM::where($request->filter, $request->key)->where($request->alsofilter,$request->alsokey)->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','startdate','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
         return new RequestResource($requests);
     }
 
