@@ -37,6 +37,12 @@ class ServiceProvidorController extends Controller
      */
     public function store(Request $request)
     {
+
+        $request->validate([
+            'phonenumber' => 'required|string|unique:serviceprovidors',
+            'password' => 'required|string'
+        ]);
+
         $serviceprovider = $request->isMethod('put') ? ServiceProvidor::findOrFail
         ($request->id) : new ServiceProvidor;
         

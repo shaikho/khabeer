@@ -38,7 +38,11 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        Log::debug(is_array($request->subno));
+        $request->validate([
+            'phonenumber' => 'required|string|unique:admins',
+            'password' => 'required|string'
+        ]);
+
         $admin = $request->isMethod('put') ? Admin::findOrFail
         ($request->id) : new Admin;
         
