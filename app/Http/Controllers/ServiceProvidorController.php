@@ -73,13 +73,16 @@ class ServiceProvidorController extends Controller
                 'Message'=>'password is required.'
             ];
         }
+        
         if (!empty($request->input('notification_token'))) {
             $serviceprovider->notification_token = $request->input('notification_token');
         }
         else {
-            return [
-                'Message'=>'notification_token is required.'
-            ];
+            $serviceprovider->notification_token = '';
+            //this should be removed
+            // return [
+            //     'Message'=>'notification_token is required.'
+            // ];
         }
         $serviceprovider->buildingno = $request->input('buildingno');
         $serviceprovider->unitno = $request->input('unitno');
@@ -108,6 +111,7 @@ class ServiceProvidorController extends Controller
     /**
      * Display the specified resource.
      *
+     * 
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
