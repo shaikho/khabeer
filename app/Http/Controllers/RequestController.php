@@ -162,7 +162,12 @@ class RequestController extends Controller
     public function show($id)
     {
         $req = RM::findOrFail($id);
+        //$serviceprovider = ServiceProvidor::findOrFail($req->providerid);
         return new RequestResource($req);
+        // return response()->json([
+        //     'Request' => new RequestResource($req),
+        //     'providorname' => $serviceprovider->username
+        // ],200);
     }
 
     /**

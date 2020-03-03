@@ -37,15 +37,91 @@ class ServiceProvidorController extends Controller
      */
     public function store(Request $request)
     {
+        if($request->isMethod('put')) {
+
+            $request->validate([
+                'id' => 'required|string'
+            ]);
+
+            $serviceprovider = ServiceProvidor::findOrFail($request->id);
+            if(!empty($request->input('username'))){
+                $serviceprovider->username = $request->input('username');
+            }
+            if(!empty($request->input('phonenumber'))){
+                $serviceprovider->phonenumber = $request->input('phonenumber');
+            }
+            if(!empty($request->input('password'))){
+                $serviceprovider->password = $request->input('password');
+            }
+            if(!empty($request->input('buildingno'))){
+                $serviceprovider->buildingno = $request->input('buildingno');
+            }
+            if(!empty($request->input('unitno'))){
+                $serviceprovider->unitno = $request->input('unitno');
+            }
+            if(!empty($request->input('docs'))){
+                $serviceprovider->docs = $request->input('docs');
+            }
+            if(!empty($request->input('profileimg'))){
+                $serviceprovider->profileimg = $request->input('profileimg');
+            }
+            if(!empty($request->input('role'))){
+                $serviceprovider->role = $request->input('role');
+            }
+            if(!empty($request->input('postalcode'))){
+                $serviceprovider->postalcode = $request->input('postalcode');
+            }
+            if(!empty($request->input('neighborhood'))){
+                $serviceprovider->neighborhood = $request->input('neighborhood');
+            }
+            if(!empty($request->input('nationalid'))){
+                $serviceprovider->nationalid = $request->input('nationalid');
+            }
+            if(!empty($request->input('nationaladdress'))){
+                $serviceprovider->nationaladdress = $request->input('nationaladdress');
+            }
+            if(!empty($request->input('rate'))){
+                $serviceprovider->rate = $request->input('rate');
+            }
+            if(!empty($request->input('clients'))){
+                $serviceprovider->clients = $request->input('clients');
+            }
+            if(!empty($request->input('type'))){
+                $serviceprovider->type = $request->input('type');
+            }
+            if(!empty($request->input('approved'))){
+                $serviceprovider->approved = $request->input('approved');
+            }
+            if(!empty($request->input('code'))){
+                $serviceprovider->code = $request->input('code');
+            }
+            if(!empty($request->input('active'))){
+                $serviceprovider->active = $request->input('active');
+            }
+            if(!empty($request->input('requestid'))){
+                $serviceprovider->requestid = $request->input('requestid');
+            }
+            if(!empty($request->input('subserviceid'))){
+                $serviceprovider->subserviceid = $request->input('subserviceid');
+            }
+            if(!empty($request->input('credit'))){
+                $serviceprovider->credit = $request->input('credit');
+            }
+            if(!empty($request->input('notification_token'))){
+                $serviceprovider->notification_token = $request->input('notification_token');
+            }
+            if($serviceprovider->save()){
+                return new ServiceProvidorResource($serviceprovider);
+            }
+        }
 
         $request->validate([
-            'phonenumber' => 'required|string',
+            'phonenumber' => 'required|string|unique:service_providors',
             'password' => 'required|string'
         ]);
 
-        $serviceprovider = $request->isMethod('put') ? ServiceProvidor::findOrFail
-        ($request->id) : new ServiceProvidor;
-        
+        $serviceprovider = new ServiceProvidor;
+
         //$serviceprovider->username = $request->input('username');
         if (!empty($request->input('username'))) {
             $serviceprovider->username = $request->input('username');
@@ -100,7 +176,11 @@ class ServiceProvidorController extends Controller
         $serviceprovider->code = $request->input('code');
         $serviceprovider->active = $request->input('active');
         $serviceprovider->requestid = $request->input('requestid');
-        $serviceprovider->credit = $request->input('credit');
+        if (!empty($request->input('credit'))) {
+            $serviceprovider->credit = $request->input('credit');
+        }else{
+            $serviceprovider->credit = '0';
+        }
         $serviceprovider->subserviceid = $request->input('subserviceid');
 
         if($serviceprovider->save()){
@@ -202,5 +282,47 @@ class ServiceProvidorController extends Controller
 
         $requests = ServiceProvidor::where($request->filter, $request->key)->get(['id','username', 'phonenumber','password','buildingno','unitno','docs','profileimg','role','postalcode','neighborhood','nationalid','nationaladdress','rate','clients','type','approved','code','active','requestid','subserviceid','credit','notification_token','created_at','updated_at']);
         return new ServiceProvidorResource($requests);
+    }
+
+    public function addcredit(Request $request){
+        $request->validate([
+            'id' => 'required',
+            'amount' => 'required'
+        ]);
+
+        $serviceprovider = ServiceProvidor::findOrFail($request->id);
+        $providorcredit = (int)$serviceprovider->credit;
+        $amount = $request->amount;
+        $sum = $providorcredit + $amount;
+        $serviceprovider->credit = (string)$sum;
+        $serviceprovider->save();
+
+        return response()->json([
+            'Message' => 'creadit added.'
+        ],200);
+    }
+
+    public function substractcredit(Request $request){
+        $request->validate([
+            'id' => 'required',
+            'amount' => 'required'
+        ]);
+
+        $serviceprovider = ServiceProvidor::findOrFail($request->id);
+        $providorcredit = (int)$serviceprovider->credit;
+        $amount = $request->amount;
+        if ($amount <= $providorcredit){
+            $sum = $providorcredit - $amount;
+        }else{
+            return response()->json([
+                'Message' => 'Providor credit is not sufficient.'
+            ],200);
+        }
+        $serviceprovider->credit = (string)$sum;
+        $serviceprovider->save();
+
+        return response()->json([
+            'Message' => 'Creadit Substracted.'
+        ],200);
     }
 }

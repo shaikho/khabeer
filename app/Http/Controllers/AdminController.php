@@ -38,13 +38,47 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'phonenumber' => 'required|string|unique:admins',
-            'password' => 'required|string'
-        ]);
+        // $request->validate([
+        //     'phonenumber' => 'required|string|unique:admins',
+        //     'password' => 'required|string'
+        // ]);
 
-        $admin = $request->isMethod('put') ? Admin::findOrFail
-        ($request->id) : new Admin;
+        // $admin = $request->isMethod('put') ? Admin::findOrFail
+        // ($request->id) : new Admin;
+
+        if($request->isMethod('put')) {
+
+            $request->validate([
+                'id' => 'required|string'
+            ]);
+
+            $admin = Admin::findOrFail($request->id);
+
+            if(!empty($request->input('username'))){
+                $admin->username = $request->input('username');
+            }
+            if(!empty($request->input('password'))){
+                $admin->password = $request->input('password');
+            }
+            if(!empty($request->input('phonenumber'))){
+                $admin->phonenumber = $request->input('phonenumber');
+            }
+            if(!empty($request->input('profileimg'))){
+                $admin->profileimg = $request->input('profileimg');
+            }
+            if(!empty($request->input('role'))){
+                $admin->role = $request->input('role');
+            }
+            if(!empty($request->input('area'))){
+                $admin->area = $request->input('area');
+            }
+
+            if($admin->save()){
+                return new AdminResource($admin);
+            }
+        }
+
+        $admin = new Admin;
         
         if (empty($request->input('username'))) {
             return [
@@ -89,11 +123,11 @@ class AdminController extends Controller
         else {
             $admin->area = $request->input('area');
         }
+        $admin->profileimg = $request->input('profileimg');
 
         if($admin->save()){
             return new AdminResource($admin);
         }
-        $admin->profileimg = $request->input('profileimg');
     }
 
     /**
@@ -142,7 +176,7 @@ class AdminController extends Controller
         $admin = Admin::findOrFail($id);
 
         if($admin->delete()){
-            return new ServiceResource($admin);
+            return new AdminResource($admin);
         }
     }
 
