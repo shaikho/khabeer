@@ -134,9 +134,9 @@ class AuthController extends Controller
                         $tokenResult->token->expires_at
                     )->toDateTimeString()
                 ]);
-                    }else {
-                        return response()->json(['error' => 'Unauthorized'], 401);
-                    }
+            }else {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
             }
             else {
                 return response()->json(['error' => 'Unauthorized'], 401);
