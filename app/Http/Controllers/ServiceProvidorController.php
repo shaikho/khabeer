@@ -39,7 +39,7 @@ class ServiceProvidorController extends Controller
     {
 
         $request->validate([
-            'phonenumber' => 'required|string|unique:service_providors',
+            'phonenumber' => 'required|string',
             'password' => 'required|string'
         ]);
 
