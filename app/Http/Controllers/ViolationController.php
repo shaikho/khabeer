@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ViolationResource;
 use Illuminate\Http\Request;
 use App\Violation;
+use App\User;
+use App\ServiceProvidor;
 
 class ViolationController extends Controller
 {
@@ -16,6 +18,13 @@ class ViolationController extends Controller
     public function index()
     {
         $violation = Violation::All();
+        // $serviceprovidor = ServiceProvidor::findOrFail($violation->providor_id);
+        // $customer = User::findOrFail($violation->user_id);
+        // return response()->json([
+        //     'data' => $violation,
+            // 'providername' => $serviceprovidor->username,
+            // 'customername' => $customer->username
+        // ],200);
         return new ViolationResource($violation);
     }
 
@@ -106,7 +115,14 @@ class ViolationController extends Controller
     public function show($id)
     {
         $violation = Violation::findOrFail($id);
-        return new ViolationResource($violation);
+        $serviceprovidor = ServiceProvidor::findOrFail($violation->providor_id);
+        $customer = User::findOrFail($violation->user_id);
+        return response()->json([
+            'data' => $violation,
+            'providername' => $serviceprovidor->username,
+            'customername' => $customer->username
+        ],200);
+        //return new ViolationResource($violation);
 
     }
 
