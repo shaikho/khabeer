@@ -91,7 +91,8 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::post('violation','ViolationController@store');
       Route::put('violation','ViolationController@store');
       Route::delete('violation/{id}','ViolationController@destroy');
-
+      //summary
+      Route::get('summary','ViolationController@summary');
 
   });
 

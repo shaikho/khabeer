@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Violation;
 use App\User;
 use App\ServiceProvidor;
+use Illuminate\Support\Facades\DB;
+
 
 class ViolationController extends Controller
 {
@@ -162,5 +164,20 @@ class ViolationController extends Controller
         if($violation->delete()){
             return new ViolationResource($violation);
         }
+    }
+
+    public function summary(){
+        $userscount = DB::table('users')->count();
+        $requestscount = DB::table('r_m_s')->count();
+        $serviceprovidorscount = DB::table('service_providors')->count();
+        $servicescount = DB::table('services')->count();
+        $subservicescount = DB::table('sub_services')->count();
+        return response()->json([
+            'userscount' => $userscount,
+            'requestscount' => $requestscount,
+            'serviceprovidorscount' => $serviceprovidorscount,
+            'servicescount' => $servicescount,
+            'subservicescount' => $subservicescount,
+        ],200);
     }
 }
