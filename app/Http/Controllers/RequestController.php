@@ -162,12 +162,27 @@ class RequestController extends Controller
     public function show($id)
     {
         $req = RM::findOrFail($id);
-        //$serviceprovider = ServiceProvidor::findOrFail($req->providerid);
-        return new RequestResource($req);
-        // return response()->json([
-        //     'Request' => new RequestResource($req),
-        //     'providorname' => $serviceprovider->username
-        // ],200);
+
+        $providor = 'N/A';
+        $customer = 'N/A';
+
+        if($req->providerid != null){
+            $serviceprovider = ServiceProvidor::findOrFail($req->providerid);
+            $providor = $serviceprovider->username;
+        }
+
+        if($req->userid != null){
+            $user = User::findOrFail($req->userid);
+            $customer = $user->username;
+        }
+        
+        return response()->json([
+            'data' => new RequestResource($req),
+            'providorname' => $providor,
+            'customername' => $customer
+        ],200);
+
+        //return new RequestResource($req);
     }
 
     /**
@@ -203,9 +218,31 @@ class RequestController extends Controller
     {
         $req = RM::findOrFail($id);
 
-        if ($req->delete()){
-            return new RequestResource($req);
+        $providor = 'N/A';
+        $customer = 'N/A';
+
+        if($req->providerid != null){
+            $serviceprovider = ServiceProvidor::findOrFail($req->providerid);
+            $providor = $serviceprovider->username;
         }
+
+        if($req->userid != null){
+            $user = User::findOrFail($req->userid);
+            $customer = $user->username;
+        }
+        
+        if ($req->delete()){
+
+            return response()->json([
+                'data' => new RequestResource($req),
+                'providorname' => $providor,
+                'customername' => $customer
+            ],200);
+        }
+        
+        // if ($req->delete()){
+        //     return new RequestResource($req);
+        // }
     }
 
     public function requestsbyuser($id){
