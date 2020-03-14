@@ -93,6 +93,7 @@ Route::group(['middleware' => 'auth:api'], function() {
       Route::delete('violation/{id}','ViolationController@destroy');
       //summary
       Route::get('summary','ViolationController@summary');
+      Route::post('scheduled','RequestController@scheduled');
 
   });
 

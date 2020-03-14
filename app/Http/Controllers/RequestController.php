@@ -10,6 +10,7 @@ use DB;
 use Illuminate\Http\Request;
 use App\Http\Resources\RequestResource as RequestResource;
 use App\ServiceProvidor;
+use DateTime;
 
 class RequestController extends Controller
 {
@@ -332,5 +333,48 @@ class RequestController extends Controller
     public function getliverequests(Request $request){
         $requests = RM::where('startdate', 'NOW')->get(['id','subno', 'subserviceprice','subservicename','subservicearabicname','startdate','enddate','userid','providerid','location','subserviceslug','cancelled','cancelmessage','status','user_lang','userauth','providorlang','providorauth','created_at','updated_at']);
         return new RequestResource($requests);
+    }
+
+    public function scheduled(Request $request){
+        
+        $request->validate([
+            'id' => 'required'
+            ]);
+            
+            $datetimenow = new DateTime();
+            $datetimenow = $datetimenow->format('Y-m-d H:i:s');
+            $datetimenow = date('Y-m-d H:i:s');
+            
+            $req = RM::findOrFail($request->id);
+            $date = $req->startdate;
+            // return response()->json([
+            //     'system date' => $datetimenow,
+            //     'request date' => $date
+            // ]);
+
+            if ($date > $datetimenow){
+                $providor = 'N/A';
+                $customer = 'N/A';
+
+                if($req->providerid != null){
+                    $serviceprovider = ServiceProvidor::findOrFail($req->providerid);
+                    $providor = $serviceprovider->username;
+                }
+
+                if($req->userid != null){
+                    $user = User::findOrFail($req->userid);
+                    $customer = $user->username;
+                }
+                
+                return response()->json([
+                    'data' => new RequestResource($req),
+                    'providorname' => $providor,
+                    'customername' => $customer
+                ],200);
+                }else{
+                    return response()->json([
+                        'data' => 'not scheduled request'
+                    ]);
+                }
     }
 }
