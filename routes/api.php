@@ -94,6 +94,7 @@ Route::group(['middleware' => 'auth:api'], function() {
       //summary
       Route::get('summary','ViolationController@summary');
       Route::post('scheduled','RequestController@scheduled');
+      Route::get('allscheduled','RequestController@allscheduledrequestes');
 
   });
 

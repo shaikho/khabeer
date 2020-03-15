@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Http\Resources\RequestResource as RequestResource;
 use App\ServiceProvidor;
 use DateTime;
+use Carbon\Carbon;
+
 
 class RequestController extends Controller
 {
@@ -347,10 +349,6 @@ class RequestController extends Controller
             
             $req = RM::findOrFail($request->id);
             $date = $req->startdate;
-            // return response()->json([
-            //     'system date' => $datetimenow,
-            //     'request date' => $date
-            // ]);
 
             if ($date > $datetimenow){
                 $providor = 'N/A';
@@ -376,5 +374,31 @@ class RequestController extends Controller
                         'data' => 'not scheduled request'
                     ]);
                 }
+    }
+
+    public function allscheduledrequestes(){
+
+        $requests = RM::whereDate('startdate','>=',Carbon::now()->toDateString())->get();
+
+        return response()->json([
+            'data' => $requests
+        ]);
+        
+        // $datetimenow = new DateTime();
+        // $datetimenow = $datetimenow->format('Y-m-d H:i:s');
+        // $datetimenow = date('Y-m-d H:i:s');
+
+        // $requests = RM::whereDate('startdate','>',$datetimenow);
+        // return response()->json([
+        //     'data' => $requests
+        // ]);
+        //return new RequestResource($requests);
+        // $requests = RM::All();
+
+        // foreach($requests as $request){
+        //     $date = $request->startdate;
+        //     if($date > $datetimenow){
+        //     }
+        // }
     }
 }
