@@ -169,15 +169,34 @@ class RequestController extends Controller
         $providor = 'N/A';
         $customer = 'N/A';
 
-        if($req->providerid != null){
-            $serviceprovider = ServiceProvidor::findOrFail($req->providerid);
+        $serviceprovider = ServiceProvidor::find($req->providerid);
+        $user = User::find($req->userid);
+
+        if(!empty($serviceprovider->username)){
             $providor = $serviceprovider->username;
         }
-
-        if($req->userid != null){
-            $user = User::findOrFail($req->userid);
+        if(!empty($user->username)){
             $customer = $user->username;
         }
+
+
+
+        // if(!empty($req->providerid)){
+        //     // if(ServiceProvidor::findOrFail($req->providerid)){
+        //     //     $serviceprovider = ServiceProvidor::findOrFail($req->providerid);
+        //     //     $providor = $serviceprovider->username;
+        //     // }else{
+        //     //     $providor = 'N/A';
+        //     // }
+        //     $serviceprovider = ServiceProvidor::find($req->providerid);
+        //     if()
+        //     $providor = $serviceprovider->username;
+        // }
+
+        // if(!empty($req->userid)){
+        //     $user = User::findOrFail($req->userid);
+        //     $customer = $user->username;
+        // }
         
         return response()->json([
             'data' => new RequestResource($req),
