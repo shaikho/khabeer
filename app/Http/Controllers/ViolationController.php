@@ -184,5 +184,44 @@ class ViolationController extends Controller
         ],200);
     }
 
-    
+    public function violationsbyprovidor(int $id){
+        
+        $violations = Violation::where('providor_id', $id)->get(['id','user_id', 'providor_id','admin_id','level','credit','notes','datetime','created_at','updated_at']);
+
+        $providor = 'N/A';
+        $customer = 'N/A';
+
+        $serviceprovider = ServiceProvidor::find($id);
+
+        if(!empty($serviceprovider->username)){
+            $providor = $serviceprovider->username;
+        }
+        
+        return response()->json([
+            'data' => $violations,
+            'providor' => $providor
+        ]);
+        //return new ViolationResource($violations);
+    }
+
+    public function violationsbyuser(int $id){
+        
+        $violations = Violation::where('user_id', $id)->get(['id','user_id', 'providor_id','admin_id','level','credit','notes','datetime','created_at','updated_at']);
+
+        $providor = 'N/A';
+        $customer = 'N/A';
+
+        $user = User::find($id);
+
+        if(!empty($user->username)){
+            $customer = $user->username;
+        }
+        
+        return response()->json([
+            'data' => $violations,
+            'user' => $customer
+        ]);
+        //return new ViolationResource($violations);
+    }
+
 }
