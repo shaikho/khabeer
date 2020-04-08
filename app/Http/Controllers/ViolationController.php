@@ -175,12 +175,33 @@ class ViolationController extends Controller
         $serviceprovidorscount = DB::table('service_providors')->count();
         $servicescount = DB::table('services')->count();
         $subservicescount = DB::table('sub_services')->count();
+        $requests = RM::orderBy('startdate', 'DESC')->get();
+        $requests = $requests->take(15);
+        $filteredrequests = [];
+        foreach($requests as $request){
+            if ($request->status == "submitted"){
+                $request->providorname = 'N/A';
+                $request->customername = 'N/A';
+
+                $serviceprovider = ServiceProvidor::find($request->providerid);
+                $user = User::find($request->userid);
+
+                if(!empty($serviceprovider->username)){
+                    $request->providorname = $serviceprovider->username;
+                }
+                if(!empty($user->username)){
+                    $request->customername = $user->username;
+                }
+                array_push($filteredrequests, $request);
+            }
+        }
         return response()->json([
             'userscount' => $userscount,
             'requestscount' => $requestscount,
             'serviceprovidorscount' => $serviceprovidorscount,
             'servicescount' => $servicescount,
             'subservicescount' => $subservicescount,
+            'requests' => $filteredrequests
         ],200);
     }
 
@@ -216,11 +237,6 @@ class ViolationController extends Controller
         if(!empty($user->username)){
             $customer = $user->username;
         }
-        
-        return response()->json([
-            'data' => $violations,
-            'user' => $customer
-        ]);
         //return new ViolationResource($violations);
     }
 

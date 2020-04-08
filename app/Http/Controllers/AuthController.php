@@ -25,10 +25,10 @@ class AuthController extends Controller
     public function signup(Request $request)
     {
         $request->validate([
-            'username' => 'required|string',
-            'password' => 'required|string',
+            'username' => 'required',
+            'password' => 'required',
             'phonenumber' => 'required|unique:users',
-            'notification_token' => 'required|string'
+            'notification_token' => 'required'
         ]);
         $user = new User([
             'username' => $request->username,
@@ -78,9 +78,9 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'phonenumber' => 'required|string',
-            'password' => 'required|string',
-            'notification_token' => 'required|string'
+            'phonenumber' => 'required',
+            'password' => 'required',
+            'notification_token' => 'required'
         ]);
         $credentials = request(['phonenumber', 'password']);
         if(!Auth::attempt($credentials))

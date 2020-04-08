@@ -40,7 +40,7 @@ class ServiceProvidorController extends Controller
         if($request->isMethod('put')) {
 
             $request->validate([
-                'id' => 'required|string'
+                'id' => 'required'
             ]);
 
             $serviceprovider = ServiceProvidor::findOrFail($request->id);
@@ -116,8 +116,8 @@ class ServiceProvidorController extends Controller
         }
 
         $request->validate([
-            'phonenumber' => 'required|string|unique:service_providors',
-            'password' => 'required|string'
+            'phonenumber' => 'required|unique:service_providors',
+            'password' => 'required'
         ]);
 
         $serviceprovider = new ServiceProvidor;

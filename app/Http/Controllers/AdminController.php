@@ -49,7 +49,7 @@ class AdminController extends Controller
         if($request->isMethod('put')) {
 
             $request->validate([
-                'id' => 'required|string'
+                'id' => 'required'
             ]);
 
             $admin = Admin::findOrFail($request->id);
