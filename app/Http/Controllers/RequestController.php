@@ -280,12 +280,50 @@ class RequestController extends Controller
     public function requestsbyuser($id)
     {
         $requests = RM::where('userid', $id)->get(['id', 'subno', 'subserviceprice', 'subservicename', 'subservicearabicname', 'startdate', 'enddate', 'userid', 'providerid', 'location', 'subserviceslug', 'cancelled', 'cancelmessage', 'status', 'user_lang', 'userauth', 'providorlang', 'providorauth', 'created_at', 'updated_at']);
+        $filterrequests = [];
+        foreach($requests as $request){
+
+            $request->serviceprovidername = 'N/A';
+            $request->customername = 'N/A';
+
+            $serviceprovider = ServiceProvidor::find($request->providerid);
+            $user = User::find($request->userid);
+
+            if(!empty($serviceprovider->username)){
+                $request->serviceprovidername = $serviceprovider->username;
+            }
+            if(!empty($user->username)){
+                $request->customername = $user->username;
+            }
+
+            array_push($filterrequests,$request);
+
+        }
         return new RequestResource($requests);
     }
 
     public function requestsbyprovider($id)
     {
         $requests = RM::where('providerid', $id)->get(['id', 'subno', 'subserviceprice', 'subservicename', 'subservicearabicname', 'startdate', 'enddate', 'userid', 'providerid', 'location', 'subserviceslug', 'cancelled', 'cancelmessage', 'status', 'user_lang', 'userauth', 'providorlang', 'providorauth', 'created_at', 'updated_at']);
+        $filterrequests = [];
+        foreach($requests as $request){
+
+            $request->serviceprovidername = 'N/A';
+            $request->customername = 'N/A';
+
+            $serviceprovider = ServiceProvidor::find($request->providerid);
+            $user = User::find($request->userid);
+
+            if(!empty($serviceprovider->username)){
+                $request->serviceprovidername = $serviceprovider->username;
+            }
+            if(!empty($user->username)){
+                $request->customername = $user->username;
+            }
+
+            array_push($filterrequests,$request);
+
+        }
         return new RequestResource($requests);
     }
 

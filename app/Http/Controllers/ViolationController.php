@@ -11,6 +11,7 @@ use App\ServiceProvidor;
 use Illuminate\Support\Facades\DB;
 use DateTime;
 use App\RM;
+use App\Admin;
 
 
 class ViolationController extends Controller
@@ -22,15 +23,31 @@ class ViolationController extends Controller
      */
     public function index()
     {
-        $violation = Violation::All();
-        // $serviceprovidor = ServiceProvidor::findOrFail($violation->providor_id);
-        // $customer = User::findOrFail($violation->user_id);
-        // return response()->json([
-        //     'data' => $violation,
-            // 'providername' => $serviceprovidor->username,
-            // 'customername' => $customer->username
-        // ],200);
-        return new ViolationResource($violation);
+        $violations = Violation::All();
+
+        $filteredviolations = [];
+        foreach($violations as $violation){
+            $violation->providername = 'N/A';
+            $violation->customername = 'N/A';
+            $violation->adminname = 'N/A';
+
+            $serviceprovider = ServiceProvidor::find($violation->providor_id);
+            $user = User::find($violation->user_id);
+            $admin = Admin::find($violation->admin_id);
+
+            if(!empty($serviceprovider->username)){
+                $violation->providername = $serviceprovider->username;
+            }
+            if(!empty($user->username)){
+                $violation->customername = $user->username;
+            }
+            if(!empty($admin->username)){
+                $violation->adminname = $admin->username;
+            }
+            array_push($filteredviolations, $violation);
+        }
+
+        return new ViolationResource($violations);
     }
 
     /**
@@ -175,7 +192,7 @@ class ViolationController extends Controller
         $serviceprovidorscount = DB::table('service_providors')->count();
         $servicescount = DB::table('services')->count();
         $subservicescount = DB::table('sub_services')->count();
-        $requests = RM::orderBy('startdate', 'DESC')->get();
+        $requests = RM::orderBy ('startdate', 'DESC')->get();
         $requests = $requests->take(15);
         $filteredrequests = [];
         foreach($requests as $request){
@@ -189,7 +206,7 @@ class ViolationController extends Controller
                 if(!empty($serviceprovider->username)){
                     $request->providorname = $serviceprovider->username;
                 }
-                if(!empty($user->username)){
+                if(!empty($user->username)){    
                     $request->customername = $user->username;
                 }
                 array_push($filteredrequests, $request);
