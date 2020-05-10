@@ -137,14 +137,22 @@ class ViolationController extends Controller
     public function show($id)
     {
         $violation = Violation::findOrFail($id);
-        $serviceprovidor = ServiceProvidor::findOrFail($violation->providor_id);
-        $customer = User::findOrFail($violation->user_id);
-        return response()->json([
-            'data' => $violation,
-            'providername' => $serviceprovidor->username,
-            'customername' => $customer->username
-        ],200);
-        //return new ViolationResource($violation);
+        $violation->providername = 'N/A';
+        $violation->customer = 'N/A';
+        $serviceprovidor = ServiceProvidor::find($violation->providor_id);
+        $customer = User::find($violation->user_id);
+        if(!empty($serviceprovidor->username)){
+            $violation->providername = $serviceprovidor->username;
+        }
+        if(!empty($customer->username)){
+            $violation->customer = $customer->username;
+        }
+        // return response()->json([
+        //     'data' => $violation,
+        //     'providername' => $serviceprovidor->username,
+        //     'customername' => $customer->username
+        // ],200);
+        return new ViolationResource($violation);
 
     }
 
