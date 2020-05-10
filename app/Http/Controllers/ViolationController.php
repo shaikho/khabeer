@@ -139,13 +139,18 @@ class ViolationController extends Controller
         $violation = Violation::findOrFail($id);
         $violation->providername = 'N/A';
         $violation->customer = 'N/A';
+        $violation->adminname = 'N/A';
         $serviceprovidor = ServiceProvidor::find($violation->providor_id);
         $customer = User::find($violation->user_id);
+        $admin = Admin::find($violation->admin_id);
         if(!empty($serviceprovidor->username)){
             $violation->providername = $serviceprovidor->username;
         }
         if(!empty($customer->username)){
             $violation->customer = $customer->username;
+        }
+        if(!empty($admin->username)){
+            $violation->adminname = $admin->username;
         }
         // return response()->json([
         //     'data' => $violation,
