@@ -176,17 +176,17 @@ class RequestController extends Controller
     {
         $req = RM::findOrFail($id);
 
-        $providor = 'N/A';
-        $customer = 'N/A';
+        $req->providor = 'N/A';
+        $req->customer = 'N/A';
 
         $serviceprovider = ServiceProvidor::find($req->providerid);
         $user = User::find($req->userid);
 
         if (!empty($serviceprovider->username)) {
-            $providor = $serviceprovider->username;
+            $req->providor = $serviceprovider->username;
         }
         if (!empty($user->username)) {
-            $customer = $user->username;
+            $req->customer = $user->username;
         }
 
 
@@ -208,13 +208,13 @@ class RequestController extends Controller
         //     $customer = $user->username;
         // }
 
-        return response()->json([
-            'data' => new RequestResource($req),
-            'providorname' => $providor,
-            'customername' => $customer
-        ], 200);
+        return new RequestResource($req);
+        // return response()->json([
+        //     'data' => new RequestResource($req),
+        //     'providorname' => $providor,
+        //     'customername' => $customer
+        // ], 200);
 
-        //return new RequestResource($req);
     }
 
     /**
@@ -426,24 +426,25 @@ class RequestController extends Controller
         $date = $req->startdate;
 
         if ($date > $datetimenow) {
-            $providor = 'N/A';
-            $customer = 'N/A';
+            $req->providor = 'N/A';
+            $req->customer = 'N/A';
 
             if ($req->providerid != null) {
                 $serviceprovider = ServiceProvidor::findOrFail($req->providerid);
-                $providor = $serviceprovider->username;
+                $req->providor = $serviceprovider->username;
             }
 
             if ($req->userid != null) {
                 $user = User::findOrFail($req->userid);
-                $customer = $user->username;
+                $req->customer = $user->username;
             }
 
-            return response()->json([
-                'data' => new RequestResource($req),
-                'providorname' => $providor,
-                'customername' => $customer
-            ], 200);
+            return new RequestResource($req);
+            // return response()->json([
+            //     'data' => new RequestResource($req),
+            //     'providorname' => $providor,
+            //     'customername' => $customer
+            // ], 200);
         } else {
             return response()->json([
                 'data' => 'not scheduled request'

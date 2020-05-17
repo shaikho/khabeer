@@ -239,35 +239,67 @@ class ViolationController extends Controller
         
         $violations = Violation::where('providor_id', $id)->get(['id','user_id', 'providor_id','admin_id','level','credit','notes','datetime','created_at','updated_at']);
 
-        $providor = 'N/A';
-        $customer = 'N/A';
+        $filterviolations = [];
+        foreach($violations as $violation){
 
-        $serviceprovider = ServiceProvidor::find($id);
+            $violation->provider = 'N/A';
+            $violation->customer = 'N/A';
+            $violation->admin = 'N/A';
 
-        if(!empty($serviceprovider->username)){
-            $providor = $serviceprovider->username;
+            $serviceprovider = ServiceProvidor::find($violation->providor_id);
+            $user = User::find($violation->user_id);
+            $admin = Admin::find($violation->admin_id);
+
+            if(!empty($serviceprovider->username)){
+                $violation->provider = $serviceprovider->username;
+            }
+            if(!empty($user->username)){
+                $violation->customer = $user->username;
+            }
+            if(!empty($admin->username)){
+                $violation->admin = $admin->username;
+            }
+
+            array_push($filterviolations,$violation);
         }
         
-        return response()->json([
-            'data' => $violations,
-            'providor' => $providor
-        ]);
-        //return new ViolationResource($violations);
+        // return response()->json([
+        //     'data' => $violations,
+        //     'providor' => $providor
+        // ]);
+        
+        return new ViolationResource($violations);
     }
 
     public function violationsbyuser(int $id){
         
         $violations = Violation::where('user_id', $id)->get(['id','user_id', 'providor_id','admin_id','level','credit','notes','datetime','created_at','updated_at']);
 
-        $providor = 'N/A';
-        $customer = 'N/A';
+        $filterviolations = [];
+        foreach($violations as $violation){
 
-        $user = User::find($id);
+            $violation->provider = 'N/A';
+            $violation->customer = 'N/A';
+            $violation->admin = 'N/A';
 
-        if(!empty($user->username)){
-            $customer = $user->username;
+            $serviceprovider = ServiceProvidor::find($violation->providor_id);
+            $user = User::find($violation->user_id);
+            $admin = Admin::find($violation->admin_id);
+
+            if(!empty($serviceprovider->username)){
+                $violation->provider = $serviceprovider->username;
+            }
+            if(!empty($user->username)){
+                $violation->customer = $user->username;
+            }
+            if(!empty($admin->username)){
+                $violation->admin = $admin->username;
+            }
+
+            array_push($filterviolations,$violation);
         }
-        //return new ViolationResource($violations);
+
+        return new ViolationResource($violations);
     }
 
 }
