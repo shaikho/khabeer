@@ -457,9 +457,30 @@ class RequestController extends Controller
 
         $requests = RM::whereDate('startdate', '>=', Carbon::now()->toDateString())->get();
 
-        return response()->json([
-            'data' => $requests
-        ]);
+        $filterrequests = [];
+        foreach($requests as $request){
+
+            $request->providername = 'N/A';
+            $request->customername = 'N/A';
+            $serviceprovider = ServiceProvidor::find($request->providerid);
+            $user = User::find($request->userid);
+
+            if(!empty($serviceprovider->username)){
+                $request->providername = $serviceprovider->username;
+            }
+            if(!empty($user->username)){
+                $request->customername = $user->username;
+            }
+
+            array_push($filterrequests,$request);;
+
+        }
+
+        return new RequestResource($requests);
+
+        // return response()->json([
+        //     'data' => $requests
+        // ]);
 
         // $datetimenow = new DateTime();
         // $datetimenow = $datetimenow->format('Y-m-d H:i:s');
