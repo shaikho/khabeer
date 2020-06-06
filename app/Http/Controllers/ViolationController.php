@@ -26,7 +26,7 @@ class ViolationController extends Controller
         $violations = Violation::All();
 
         $filteredviolations = [];
-        foreach($violations as $violation){
+        foreach ($violations as $violation) {
             $violation->providername = 'N/A';
             $violation->customername = 'N/A';
             $violation->adminname = 'N/A';
@@ -35,13 +35,13 @@ class ViolationController extends Controller
             $user = User::find($violation->user_id);
             $admin = Admin::find($violation->admin_id);
 
-            if(!empty($serviceprovider->username)){
+            if (!empty($serviceprovider->username)) {
                 $violation->providername = $serviceprovider->username;
             }
-            if(!empty($user->username)){
+            if (!empty($user->username)) {
                 $violation->customername = $user->username;
             }
-            if(!empty($admin->username)){
+            if (!empty($admin->username)) {
                 $violation->adminname = $admin->username;
             }
             array_push($filteredviolations, $violation);
@@ -68,62 +68,55 @@ class ViolationController extends Controller
      */
     public function store(Request $request)
     {
-        $violation = $request->isMethod('put') ? Violation::findOrFail
-        ($request->id) : new Violation();
-        
+        $violation = $request->isMethod('put') ? Violation::findOrFail($request->id) : new Violation();
+
         if (empty($request->input('user_id'))) {
             return [
-                'Message'=>'user_id is required.'
+                'Message' => 'user_id is required.'
             ];
-        }
-        else {
+        } else {
             $violation->user_id = $request->input('user_id');
         }
         //$service->servicenamearabic = $request->input('servicenamearabic');
         if (empty($request->input('providor_id'))) {
             return [
-                'Message'=>'providor_id is required.'
+                'Message' => 'providor_id is required.'
             ];
-        }
-        else {
+        } else {
             $violation->providor_id = $request->input('providor_id');
         }
         //$service->description = $request->input('description');
         if (empty($request->input('admin_id'))) {
             return [
-                'Message'=>'admin_id is required.'
+                'Message' => 'admin_id is required.'
             ];
-        }
-        else {
+        } else {
             $violation->admin_id = $request->input('admin_id');
         }
         if (empty($request->input('level'))) {
             return [
-                'Message'=>'level is required.'
+                'Message' => 'level is required.'
             ];
-        }
-        else {
+        } else {
             $violation->level = $request->input('level');
         }
         if (empty($request->input('credit'))) {
             return [
-                'Message'=>'credit is required.'
+                'Message' => 'credit is required.'
             ];
-        }
-        else {
+        } else {
             $violation->credit = $request->input('credit');
         }
         if (empty($request->input('datetime'))) {
             return [
-                'Message'=>'datetime is required.'
+                'Message' => 'datetime is required.'
             ];
-        }
-        else {
+        } else {
             $violation->datetime = $request->input('datetime');
         }
         $violation->notes = $request->input('notes');
 
-        if($violation->save()){
+        if ($violation->save()) {
             return new ViolationResource($violation);
         }
     }
@@ -143,13 +136,13 @@ class ViolationController extends Controller
         $serviceprovidor = ServiceProvidor::find($violation->providor_id);
         $customer = User::find($violation->user_id);
         $admin = Admin::find($violation->admin_id);
-        if(!empty($serviceprovidor->username)){
+        if (!empty($serviceprovidor->username)) {
             $violation->providername = $serviceprovidor->username;
         }
-        if(!empty($customer->username)){
+        if (!empty($customer->username)) {
             $violation->customer = $customer->username;
         }
-        if(!empty($admin->username)){
+        if (!empty($admin->username)) {
             $violation->adminname = $admin->username;
         }
         // return response()->json([
@@ -158,7 +151,6 @@ class ViolationController extends Controller
         //     'customername' => $customer->username
         // ],200);
         return new ViolationResource($violation);
-
     }
 
     /**
@@ -194,53 +186,72 @@ class ViolationController extends Controller
     {
         $violation = Violation::findOrFail($id);
 
-        if($violation->delete()){
+        if ($violation->delete()) {
             return new ViolationResource($violation);
         }
     }
 
-    public function summary(){
+    public function summary()
+    {
+
+        //getting counts
         $userscount = DB::table('users')->count();
         $requestscount = DB::table('r_m_s')->count();
         $serviceprovidorscount = DB::table('service_providors')->count();
         $servicescount = DB::table('services')->count();
         $subservicescount = DB::table('sub_services')->count();
-        $requests = RM::orderBy ('startdate', 'DESC')->get();
+        $requests = RM::orderBy('startdate', 'DESC')->get();
+
+        //getting last 15 request
         $requests = $requests->take(15);
         $filteredrequests = [];
-        foreach($requests as $request){
-            if ($request->status == "submitted"){
+        foreach ($requests as $request) {
+            if ($request->status == "submitted") {
                 $request->providorname = 'N/A';
                 $request->customername = 'N/A';
 
                 $serviceprovider = ServiceProvidor::find($request->providerid);
                 $user = User::find($request->userid);
 
-                if(!empty($serviceprovider->username)){
+                if (!empty($serviceprovider->username)) {
                     $request->providorname = $serviceprovider->username;
                 }
-                if(!empty($user->username)){    
+                if (!empty($user->username)) {
                     $request->customername = $user->username;
                 }
                 array_push($filteredrequests, $request);
             }
         }
+
+        //getting accumulated payedrequests
+        $allrequests = RM::orderBy('startdate', 'DESC')->get();
+        // $payedrequests = [];
+        $sum = 0;
+        foreach ($allrequests as $request) {
+            if ($request->status == "paymentConfirmed") {
+                $sum = $sum + (int) $request->subserviceprice;
+            }
+        }
+
+
         return response()->json([
             'userscount' => $userscount,
             'requestscount' => $requestscount,
             'serviceprovidorscount' => $serviceprovidorscount,
             'servicescount' => $servicescount,
             'subservicescount' => $subservicescount,
+            'sum' => $sum,
             'requests' => $filteredrequests
-        ],200);
+        ], 200);
     }
 
-    public function violationsbyprovidor(int $id){
-        
-        $violations = Violation::where('providor_id', $id)->get(['id','user_id', 'providor_id','admin_id','level','credit','notes','datetime','created_at','updated_at']);
+    public function violationsbyprovidor(int $id)
+    {
+
+        $violations = Violation::where('providor_id', $id)->get(['id', 'user_id', 'providor_id', 'admin_id', 'level', 'credit', 'notes', 'datetime', 'created_at', 'updated_at']);
 
         $filterviolations = [];
-        foreach($violations as $violation){
+        foreach ($violations as $violation) {
 
             $violation->provider = 'N/A';
             $violation->customer = 'N/A';
@@ -250,33 +261,34 @@ class ViolationController extends Controller
             $user = User::find($violation->user_id);
             $admin = Admin::find($violation->admin_id);
 
-            if(!empty($serviceprovider->username)){
+            if (!empty($serviceprovider->username)) {
                 $violation->provider = $serviceprovider->username;
             }
-            if(!empty($user->username)){
+            if (!empty($user->username)) {
                 $violation->customer = $user->username;
             }
-            if(!empty($admin->username)){
+            if (!empty($admin->username)) {
                 $violation->admin = $admin->username;
             }
 
-            array_push($filterviolations,$violation);
+            array_push($filterviolations, $violation);
         }
-        
+
         // return response()->json([
         //     'data' => $violations,
         //     'providor' => $providor
         // ]);
-        
+
         return new ViolationResource($violations);
     }
 
-    public function violationsbyuser(int $id){
-        
-        $violations = Violation::where('user_id', $id)->get(['id','user_id', 'providor_id','admin_id','level','credit','notes','datetime','created_at','updated_at']);
+    public function violationsbyuser(int $id)
+    {
+
+        $violations = Violation::where('user_id', $id)->get(['id', 'user_id', 'providor_id', 'admin_id', 'level', 'credit', 'notes', 'datetime', 'created_at', 'updated_at']);
 
         $filterviolations = [];
-        foreach($violations as $violation){
+        foreach ($violations as $violation) {
 
             $violation->provider = 'N/A';
             $violation->customer = 'N/A';
@@ -286,20 +298,19 @@ class ViolationController extends Controller
             $user = User::find($violation->user_id);
             $admin = Admin::find($violation->admin_id);
 
-            if(!empty($serviceprovider->username)){
+            if (!empty($serviceprovider->username)) {
                 $violation->provider = $serviceprovider->username;
             }
-            if(!empty($user->username)){
+            if (!empty($user->username)) {
                 $violation->customer = $user->username;
             }
-            if(!empty($admin->username)){
+            if (!empty($admin->username)) {
                 $violation->admin = $admin->username;
             }
 
-            array_push($filterviolations,$violation);
+            array_push($filterviolations, $violation);
         }
 
         return new ViolationResource($violations);
     }
-
 }
