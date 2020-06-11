@@ -37,34 +37,30 @@ class SubServiceController extends Controller
      */
     public function store(Request $request)
     {
-        $subservice = $request->isMethod('put') ? Subservice::findOrFail
-        ($request->id) : new SubService;
-        
+        $subservice = $request->isMethod('put') ? Subservice::findOrFail($request->id) : new SubService;
+
         //$subservice->subservicename = $request->input('subservicename');
         if (empty($request->input('subservicename'))) {
             return [
-                'Message'=>'subservicename is required.'
+                'Message' => 'subservicename is required.'
             ];
-        }
-        else {
+        } else {
             $subservice->subservicename = $request->input('subservicename');
         }
         //$subservice->subservicenamearabic = $request->input('subservicenamearabic');
         if (empty($request->input('subservicenamearabic'))) {
             return [
-                'Message'=>'subservicenamearabic is required.'
+                'Message' => 'subservicenamearabic is required.'
             ];
-        }
-        else {
+        } else {
             $subservice->subservicenamearabic = $request->input('subservicenamearabic');
         }
         //$subservice->price = $request->input('price');
         if (empty($request->input('price'))) {
             return [
-                'Message'=>'price is required.'
+                'Message' => 'price is required.'
             ];
-        }
-        else {
+        } else {
             $subservice->price = $request->input('price');
         }
         $subservice->status = $request->input('status');
@@ -75,14 +71,13 @@ class SubServiceController extends Controller
         //$subservice->serviceid = $request->input('serviceid');
         if (empty($request->input('serviceid'))) {
             return [
-                'Message'=>'serviceid is required.'
+                'Message' => 'serviceid is required.'
             ];
-        }
-        else {
+        } else {
             $subservice->serviceid = $request->input('serviceid');
         }
 
-        if($subservice->save()){
+        if ($subservice->save()) {
             return new SubServiceResource($subservice);
         }
     }
@@ -132,19 +127,20 @@ class SubServiceController extends Controller
     {
         $subservice = SubService::findOrFail($id);
 
-        if($subservice->delete()){
+        if ($subservice->delete()) {
             return new SubServiceResource($subservice);
         }
     }
 
-    public function filteredsubservices($id){
+    public function filteredsubservices($id)
+    {
         //$subservices = SubService::find($id, ['subservicename', 'subservicenamearabic','price','status','slug','description','descriptionarabic','serviceid','created_at','update_at']);
         //$subservices = SubService::all(['subservicename'])->toArray();
         //$subservices = SubService::where('serviceid',$id)->get(['subservicename', 'subservicenamearabic','price','status','slug','description','descriptionarabic','serviceid','created_at','update_at'])->toArray();
         //$subservices = SubService::find($id, ['subservicename', 'subservicenamearabic','price','status','slug','description','descriptionarabic','serviceid','created_at','update_at']);
         //$subservices = SubService::all(['serviceid'])->toArray();
         //$subservices = SubService::where('serviceid', $id)->pluck('subservicename', 'subservicenamearabic','price','status','slug','description','descriptionarabic','serviceid','created_at','update_at')->all();
-        $subservices = SubService::where('serviceid', $id)->get(['id','subservicename', 'subservicenamearabic','price','status','slug','description','descriptionarabic','serviceid','created_at','updated_at','iconurl']);
+        $subservices = SubService::where('serviceid', $id)->where('status', 'active')->get(['id', 'subservicename', 'subservicenamearabic', 'price', 'status', 'slug', 'description', 'descriptionarabic', 'serviceid', 'created_at', 'updated_at', 'iconurl']);
         return new SubServiceResource($subservices);
     }
 }
