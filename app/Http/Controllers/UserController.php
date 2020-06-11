@@ -37,34 +37,30 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = $request->isMethod('put') ? User::findOrFail
-        ($request->id) : new User;
-        
+        $user = $request->isMethod('put') ? User::findOrFail($request->id) : new User;
+
         //$user->username = $request->input('username');
         if (empty($request->input('username'))) {
             return [
-                'Message'=>'username is required.'
+                'Message' => 'username is required.'
             ];
-        }
-        else {
+        } else {
             $user->username = $request->input('username');
         }
         //$user->password = $request->input('password');
         if (empty($request->input('password'))) {
             return [
-                'Message'=>'password is required.'
+                'Message' => 'password is required.'
             ];
-        }
-        else {
+        } else {
             $user->password = $request->input('password');
         }
         //$user->phonenumber = $request->input('phonenumber');
         if (empty($request->input('phonenumber'))) {
             return [
-                'Message'=>'phonenumber is required.'
+                'Message' => 'phonenumber is required.'
             ];
-        }
-        else {
+        } else {
             $user->phonenumber = $request->input('phonenumber');
         }
         $user->profileimg = $request->input('profileimg');
@@ -75,7 +71,7 @@ class UserController extends Controller
         $user->serviceproviderid = $request->input('serviceproviderid');
         $user->balance = $request->input('balance');
 
-        if($user->save()){
+        if ($user->save()) {
             return new UserResource($user);
         }
     }
@@ -125,45 +121,51 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if($user->delete()){
+        if ($user->delete()) {
             return new ServiceResource($user);
         }
     }
 
-    public function otpuser(Request $request){
-        $otp = rand(100000,999999);
-        $messageloadtobesent='';
+    public function otpuser(Request $request)
+    {
+        $otp = rand(100000, 999999);
+        $messageloadtobesent = '';
         $usernumber = $request->phonenumber;
-        $client = new \GuzzleHttp\Client(); 
+        $client = new \GuzzleHttp\Client();
         $sentrequest = "https://www.hisms.ws/api.php?send_sms&username=966500253832&password=0919805287&numbers={$usernumber}&sender=khabir&message={$otp}";
         $res = $client->get($sentrequest);
         $result = $res->getBody();
-        if (substr($result,0,1) == '3'){
+        if (substr($result, 0, 1) == '3') {
             $messageloadtobesent = 'Message sent!';
-        }
-        else {
+        } else {
             $messageloadtobesent = 'Message not sent!';
         }
         return response()->json([
             'messagestatus' => $messageloadtobesent,
             'otp' => $otp
-        ],200);
+        ], 200);
     }
 
-    public function uploadprofileimg(Request $request,$id) {
+    public function uploadprofileimg(Request $request, $id)
+    {
         $user = User::findOrFail($id);
-        $filename = $user->username . $user->phonenumber . ".jpg";
-        $path = $request->file('photo')->move(public_path("uploads/"),$filename);
-        $photoURL = url('uploads/'.$filename);
+        $filename = $user->id . $user->phonenumber . ".jpg";
+        $path = $request->file('photo')->move(public_path("uploads/"), $filename);
+        $photoURL = url('uploads/' . $filename);
+        $user->profileimg = $photoURL;
+        $user->save();
         return response()->json([
-            'url'=> $photoURL
-        ],200);
+            'url' => $photoURL
+        ], 200);
     }
 
-    public function rate(Request $request,$id){
-        $rate = 0;$count = 0;$newcount = 0;
+    public function rate(Request $request, $id)
+    {
+        $rate = 0;
+        $count = 0;
+        $newcount = 0;
         $request->validate([
-            'rate'=>'required'
+            'rate' => 'required'
         ]);
 
         $user = User::findOrFail($id);
@@ -174,22 +176,23 @@ class UserController extends Controller
         $token = strtok(",");
         $rate = $token;
         $newcount = $count + 1;
-        $result = $count*$rate;
-        $result = $result+$passedrating;
-        $result = $result/$newcount;
-        $user->rate = $newcount . "," .substr($result,0,4);
+        $result = $count * $rate;
+        $result = $result + $passedrating;
+        $result = $result / $newcount;
+        $user->rate = $newcount . "," . substr($result, 0, 4);
         $user->update();
         return response()->json([
-            'count'=> $newcount,
-            'rate'=> substr($result,0,4)            
-        ],200);
+            'count' => $newcount,
+            'rate' => substr($result, 0, 4)
+        ], 200);
     }
 
-    public function notifyuser(Request $request){
+    public function notifyuser(Request $request)
+    {
 
-        $client = new \GuzzleHttp\Client(['headers' => ['Authorization' => 'key=AAAA_zwre0s:APA91bFD9MhifoGNK0AXJp-ejWTwBpLIFL45xAku_YgaCMp00Wan5CCI1QrqwnmCKGK-DPWDmnqnr0w3L7wmizfmk5r-uloPKx1dgRYpGZ9Xsz3veFF2ZxZ_vI0zSU-DU5qDPNMll1gQ'],['Content-Type' => 'application/json']]); 
+        $client = new \GuzzleHttp\Client(['headers' => ['Authorization' => 'key=AAAA_zwre0s:APA91bFD9MhifoGNK0AXJp-ejWTwBpLIFL45xAku_YgaCMp00Wan5CCI1QrqwnmCKGK-DPWDmnqnr0w3L7wmizfmk5r-uloPKx1dgRYpGZ9Xsz3veFF2ZxZ_vI0zSU-DU5qDPNMll1gQ'], ['Content-Type' => 'application/json']]);
         $sentrequest = "https://fcm.googleapis.com/fcm/send";
-        $res = $client->post($sentrequest,[
+        $res = $client->post($sentrequest, [
             'json' => [
                 'to' => 'dVCcZW0eY_IdQ2FzR6ocfs:APA91bGFMxrCo8_qAYQIeciklIAeLmlSZ_WUsFzbcaxyUPVHNAH0kxZQPNYe6PHTtrAjDimwurQ_elhllJu2zXV_7wVmep8sT1fk1KmT6ekeDk6pMjyYKXWRIrpW4mC9C0IO3pknxgEz',
                 'notification' => [

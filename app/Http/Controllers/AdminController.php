@@ -46,7 +46,7 @@ class AdminController extends Controller
         // $admin = $request->isMethod('put') ? Admin::findOrFail
         // ($request->id) : new Admin;
 
-        if($request->isMethod('put')) {
+        if ($request->isMethod('put')) {
 
             $request->validate([
                 'id' => 'required'
@@ -54,78 +54,73 @@ class AdminController extends Controller
 
             $admin = Admin::findOrFail($request->id);
 
-            if(!empty($request->input('username'))){
+            if (!empty($request->input('username'))) {
                 $admin->username = $request->input('username');
             }
-            if(!empty($request->input('password'))){
+            if (!empty($request->input('password'))) {
                 $admin->password = $request->input('password');
             }
-            if(!empty($request->input('phonenumber'))){
+            if (!empty($request->input('phonenumber'))) {
                 $admin->phonenumber = $request->input('phonenumber');
             }
-            if(!empty($request->input('profileimg'))){
+            if (!empty($request->input('profileimg'))) {
                 $admin->profileimg = $request->input('profileimg');
             }
-            if(!empty($request->input('role'))){
+            if (!empty($request->input('role'))) {
                 $admin->role = $request->input('role');
             }
-            if(!empty($request->input('area'))){
+            if (!empty($request->input('area'))) {
                 $admin->area = $request->input('area');
             }
 
-            if($admin->save()){
+            if ($admin->save()) {
                 return new AdminResource($admin);
             }
         }
 
         $admin = new Admin;
-        
+
         if (empty($request->input('username'))) {
             return [
-                'Message'=>'username is required.'
+                'Message' => 'username is required.'
             ];
-        }
-        else {
+        } else {
             $admin->username = $request->input('username');
         }
         if (empty($request->input('password'))) {
             return [
-                'Message'=>'password is required.'
+                'Message' => 'password is required.'
             ];
-        }
-        else {
+        } else {
             $admin->password = $request->input('password');
         }
         //$admin->phonenumber = $request->input('phonenumber');
         if (empty($request->input('phonenumber'))) {
             return [
-                'Message'=>'phonenumber is required.'
+                'Message' => 'phonenumber is required.'
             ];
-        }
-        else {
+        } else {
             $admin->phonenumber = $request->input('phonenumber');
         }
         //$admin->role = $request->input('role');
         if (empty($request->input('role'))) {
             return [
-                'Message'=>'role is required.'
+                'Message' => 'role is required.'
             ];
-        }
-        else {
+        } else {
             $admin->role = $request->input('role');
         }
         //$admin->area = $request->input('area');
         if (empty($request->input('area'))) {
             return [
-                'Message'=>'area is required.'
+                'Message' => 'area is required.'
             ];
-        }
-        else {
+        } else {
             $admin->area = $request->input('area');
         }
         $admin->profileimg = $request->input('profileimg');
 
-        if($admin->save()){
+        if ($admin->save()) {
             return new AdminResource($admin);
         }
     }
@@ -175,27 +170,31 @@ class AdminController extends Controller
     {
         $admin = Admin::findOrFail($id);
 
-        if($admin->delete()){
+        if ($admin->delete()) {
             return new AdminResource($admin);
         }
     }
 
-    public function uploadprofileimg(Request $request,$id) {
+    public function uploadprofileimg(Request $request, $id)
+    {
         $user = Admin::findOrFail($id);
-        $filename = $user->username . $user->phonenumber . ".jpg";
-        $path = $request->file('photo')->move(public_path("uploads/"),$filename);
-        $photoURL = url('uploads/'.$filename);
+        $filename = $user->id . $user->phonenumber . ".jpg";
+        $path = $request->file('photo')->move(public_path("uploads/"), $filename);
+        $photoURL = url('uploads/' . $filename);
+        $user->profileimg = $photoURL;
+        $user->save();
         return response()->json([
-            'url'=> $photoURL
-        ],200);
+            'url' => $photoURL
+        ], 200);
     }
 
-    public function uploadicon(Request $request,$id) {
+    public function uploadicon(Request $request, $id)
+    {
         $filename = $id . ".jpg";
-        $path = $request->file('photo')->move(public_path("uploads/"),$filename);
-        $photoURL = url('uploads/'.$filename);
+        $path = $request->file('photo')->move(public_path("uploads/"), $filename);
+        $photoURL = url('uploads/' . $filename);
         return response()->json([
-            'url'=> $photoURL
-        ],200);
+            'url' => $photoURL
+        ], 200);
     }
 }

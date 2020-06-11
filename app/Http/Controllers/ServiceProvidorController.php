@@ -266,9 +266,11 @@ class ServiceProvidorController extends Controller
 
     public function uploadprofileimg(Request $request,$id) {
         $user = ServiceProvidor::findOrFail($id);
-        $filename = $user->username . $user->phonenumber . ".jpg";
+        $filename = $user->id . $user->phonenumber . ".jpg";
         $path = $request->file('photo')->move(public_path("uploads/"),$filename);
         $photoURL = url('uploads/'.$filename);
+        $user->profileimg = $photoURL;
+        $user->save();
         return response()->json([
             'url'=> $photoURL
         ],200);
