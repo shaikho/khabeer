@@ -122,7 +122,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         if ($user->delete()) {
-            return new ServiceResource($user);
+            return new UserResource($user);
         }
     }
 
