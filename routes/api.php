@@ -111,8 +111,7 @@ Route::post('upload', function (Request $request) {
 
     $imageName = time() . '.' . $request->input_img->getClientOriginalExtension();
     $request->input_img->move(public_path('uploadedphotos'), $imageName);
-    $url = 'http://localhost/public/uploadedphotos/' . $imageName;
-    //http://107.181.170.128/public/uploads/1125.jpg
+    $url = 'http://107.181.170.128/public/uploadedphotos/' . $imageName;
     return response()->json([
         'url' => $url
     ], 200);

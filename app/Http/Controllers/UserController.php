@@ -149,13 +149,18 @@ class UserController extends Controller
     public function uploadprofileimg(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $filename = $user->id . $user->phonenumber . ".jpg";
-        $path = $request->file('photo')->move(public_path("uploads/"), $filename);
-        $photoURL = url('uploads/' . $filename);
-        $user->profileimg = $photoURL;
+        //old upload
+        // $filename = $user->id . $user->phonenumber . ".jpg";
+        // $path = $request->file('photo')->move(public_path("uploads/"), $filename);
+        // $photoURL = url('uploads/' . $filename);
+        //new upload
+        $imageName = time() . '.' . $request->input_img->getClientOriginalExtension();
+        $request->input_img->move(public_path('uploadedphotos'), $imageName);
+        $url = 'http://107.181.170.128/public/uploadedphotos/' . $imageName;
+        $user->profileimg = $url;
         $user->save();
         return response()->json([
-            'url' => $photoURL
+            'url' => $url
         ], 200);
     }
 
