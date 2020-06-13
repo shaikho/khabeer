@@ -154,8 +154,8 @@ class UserController extends Controller
         // $path = $request->file('photo')->move(public_path("uploads/"), $filename);
         // $photoURL = url('uploads/' . $filename);
         //new upload
-        $imageName = time() . '.' . $request->input_img->getClientOriginalExtension();
-        $request->input_img->move(public_path('uploadedphotos'), $imageName);
+        $imageName = time() . '.' . $request->photo->getClientOriginalExtension();
+        $request->photo->move(public_path('uploadedphotos'), $imageName);
         $url = 'http://107.181.170.128/public/uploadedphotos/' . $imageName;
         $user->profileimg = $url;
         $user->save();
