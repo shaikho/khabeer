@@ -37,80 +37,80 @@ class ServiceProvidorController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->isMethod('put')) {
+        if ($request->isMethod('put')) {
 
             $request->validate([
                 'id' => 'required'
             ]);
 
             $serviceprovider = ServiceProvidor::findOrFail($request->id);
-            if(!empty($request->input('username'))){
+            if (!empty($request->input('username'))) {
                 $serviceprovider->username = $request->input('username');
             }
-            if(!empty($request->input('phonenumber'))){
+            if (!empty($request->input('phonenumber'))) {
                 $serviceprovider->phonenumber = $request->input('phonenumber');
             }
-            if(!empty($request->input('password'))){
+            if (!empty($request->input('password'))) {
                 $serviceprovider->password = $request->input('password');
             }
-            if(!empty($request->input('buildingno'))){
+            if (!empty($request->input('buildingno'))) {
                 $serviceprovider->buildingno = $request->input('buildingno');
             }
-            if(!empty($request->input('unitno'))){
+            if (!empty($request->input('unitno'))) {
                 $serviceprovider->unitno = $request->input('unitno');
             }
-            if(!empty($request->input('docs'))){
+            if (!empty($request->input('docs'))) {
                 $serviceprovider->docs = $request->input('docs');
             }
-            if(!empty($request->input('profileimg'))){
+            if (!empty($request->input('profileimg'))) {
                 $serviceprovider->profileimg = $request->input('profileimg');
             }
-            if(!empty($request->input('role'))){
+            if (!empty($request->input('role'))) {
                 $serviceprovider->role = $request->input('role');
             }
-            if(!empty($request->input('postalcode'))){
+            if (!empty($request->input('postalcode'))) {
                 $serviceprovider->postalcode = $request->input('postalcode');
             }
-            if(!empty($request->input('neighborhood'))){
+            if (!empty($request->input('neighborhood'))) {
                 $serviceprovider->neighborhood = $request->input('neighborhood');
             }
-            if(!empty($request->input('nationalid'))){
+            if (!empty($request->input('nationalid'))) {
                 $serviceprovider->nationalid = $request->input('nationalid');
             }
-            if(!empty($request->input('nationaladdress'))){
+            if (!empty($request->input('nationaladdress'))) {
                 $serviceprovider->nationaladdress = $request->input('nationaladdress');
             }
-            if(!empty($request->input('rate'))){
+            if (!empty($request->input('rate'))) {
                 $serviceprovider->rate = $request->input('rate');
             }
-            if(!empty($request->input('clients'))){
+            if (!empty($request->input('clients'))) {
                 $serviceprovider->clients = $request->input('clients');
             }
-            if(!empty($request->input('type'))){
+            if (!empty($request->input('type'))) {
                 $serviceprovider->type = $request->input('type');
             }
-            if(!empty($request->input('approved'))){
+            if (!empty($request->input('approved'))) {
                 $serviceprovider->approved = $request->input('approved');
             }
-            if(!empty($request->input('code'))){
+            if (!empty($request->input('code'))) {
                 $serviceprovider->code = $request->input('code');
             }
-            if(!empty($request->input('active'))){
+            if (!empty($request->input('active'))) {
                 $serviceprovider->active = $request->input('active');
             }
-            if(!empty($request->input('requestid'))){
+            if (!empty($request->input('requestid'))) {
                 $serviceprovider->requestid = $request->input('requestid');
             }
-            if(!empty($request->input('subserviceid'))){
+            if (!empty($request->input('subserviceid'))) {
                 $serviceprovider->subserviceid = $request->input('subserviceid');
             }
-            if(!empty($request->input('credit'))){
+            if (!empty($request->input('credit'))) {
                 $serviceprovider->credit = $request->input('credit');
             }
-            if(!empty($request->input('notification_token'))){
+            if (!empty($request->input('notification_token'))) {
                 $serviceprovider->notification_token = $request->input('notification_token');
             }
-            if($serviceprovider->save()){
+            if ($serviceprovider->save()) {
                 return new ServiceProvidorResource($serviceprovider);
             }
         }
@@ -125,35 +125,31 @@ class ServiceProvidorController extends Controller
         //$serviceprovider->username = $request->input('username');
         if (!empty($request->input('username'))) {
             $serviceprovider->username = $request->input('username');
-        }
-        else {
+        } else {
             return [
-                'Message'=>'username is required.'
+                'Message' => 'username is required.'
             ];
         }
         //$serviceprovider->phonenumber = $request->input('phonenumber');
         if (!empty($request->input('phonenumber'))) {
             $serviceprovider->phonenumber = $request->input('phonenumber');
-        }
-        else {
+        } else {
             return [
-                'Message'=>'phonenumber is required.'
+                'Message' => 'phonenumber is required.'
             ];
         }
         //$serviceprovider->password = $request->input('password');
         if (!empty($request->input('password'))) {
             $serviceprovider->password = $request->input('password');
-        }
-        else {
+        } else {
             return [
-                'Message'=>'password is required.'
+                'Message' => 'password is required.'
             ];
         }
-        
+
         if (!empty($request->input('notification_token'))) {
             $serviceprovider->notification_token = $request->input('notification_token');
-        }
-        else {
+        } else {
             $serviceprovider->notification_token = '';
             //this should be removed
             // return [
@@ -178,12 +174,12 @@ class ServiceProvidorController extends Controller
         $serviceprovider->requestid = $request->input('requestid');
         if (!empty($request->input('credit'))) {
             $serviceprovider->credit = $request->input('credit');
-        }else{
+        } else {
             $serviceprovider->credit = '0';
         }
         $serviceprovider->subserviceid = $request->input('subserviceid');
 
-        if($serviceprovider->save()){
+        if ($serviceprovider->save()) {
             return new ServiceProvidorResource($serviceprovider);
         }
     }
@@ -234,15 +230,18 @@ class ServiceProvidorController extends Controller
     {
         $serviceprovider = ServiceProvidor::findOrFail($id);
 
-        if($serviceprovider->delete()){
+        if ($serviceprovider->delete()) {
             return new ServiceProvidorResource($serviceprovider);
         }
     }
 
-    public function rate(Request $request,$id){
-        $rate = 0;$count = 0;$newcount = 0;
+    public function rate(Request $request, $id)
+    {
+        $rate = 0;
+        $count = 0;
+        $newcount = 0;
         $request->validate([
-            'rate'=>'required'
+            'rate' => 'required'
         ]);
 
         $serviceprovider = ServiceProvidor::findOrFail($id);
@@ -253,18 +252,19 @@ class ServiceProvidorController extends Controller
         $token = strtok(",");
         $rate = $token;
         $newcount = $count + 1;
-        $result = $count*$rate;
-        $result = $result+$passedrating;
-        $result = $result/$newcount;
-        $serviceprovider->rate = $newcount . "," .substr($result,0,4);
+        $result = $count * $rate;
+        $result = $result + $passedrating;
+        $result = $result / $newcount;
+        $serviceprovider->rate = $newcount . "," . substr($result, 0, 4);
         $serviceprovider->update();
         return response()->json([
-            'count'=> $newcount,
-            'rate'=> substr($result,0,4)            
-        ],200);
+            'count' => $newcount,
+            'rate' => substr($result, 0, 4)
+        ], 200);
     }
 
-    public function uploadprofileimg(Request $request,$id) {
+    public function uploadprofileimg(Request $request, $id)
+    {
         $user = ServiceProvidor::findOrFail($id);
         //old upload
         // $filename = $user->id . $user->phonenumber . ".jpg";
@@ -281,55 +281,58 @@ class ServiceProvidorController extends Controller
         ], 200);
     }
 
-    public function filterserviceprovidors(Request $request){
+    public function filterserviceprovidors(Request $request)
+    {
         $request->validate([
             'filter' => 'required',
             'key' => 'required'
         ]);
 
-        $requests = ServiceProvidor::where($request->filter, $request->key)->get(['id','username', 'phonenumber','password','buildingno','unitno','docs','profileimg','role','postalcode','neighborhood','nationalid','nationaladdress','rate','clients','type','approved','code','active','requestid','subserviceid','credit','notification_token','created_at','updated_at']);
+        $requests = ServiceProvidor::where($request->filter, $request->key)->get(['id', 'username', 'phonenumber', 'password', 'buildingno', 'unitno', 'docs', 'profileimg', 'role', 'postalcode', 'neighborhood', 'nationalid', 'nationaladdress', 'rate', 'clients', 'type', 'approved', 'code', 'active', 'requestid', 'subserviceid', 'credit', 'notification_token', 'created_at', 'updated_at']);
         return new ServiceProvidorResource($requests);
     }
 
-    public function addcredit(Request $request){
+    public function addcredit(Request $request)
+    {
         $request->validate([
             'id' => 'required',
             'amount' => 'required'
         ]);
 
         $serviceprovider = ServiceProvidor::findOrFail($request->id);
-        $providorcredit = (int)$serviceprovider->credit;
+        $providorcredit = (int) $serviceprovider->credit;
         $amount = $request->amount;
         $sum = $providorcredit + $amount;
-        $serviceprovider->credit = (string)$sum;
+        $serviceprovider->credit = (string) $sum;
         $serviceprovider->save();
 
         return response()->json([
             'Message' => 'creadit added.'
-        ],200);
+        ], 200);
     }
 
-    public function substractcredit(Request $request){
+    public function substractcredit(Request $request)
+    {
         $request->validate([
             'id' => 'required',
             'amount' => 'required'
         ]);
 
         $serviceprovider = ServiceProvidor::findOrFail($request->id);
-        $providorcredit = (int)$serviceprovider->credit;
+        $providorcredit = (int) $serviceprovider->credit;
         $amount = $request->amount;
-        if ($amount <= $providorcredit){
+        if ($amount <= $providorcredit) {
             $sum = $providorcredit - $amount;
-        }else{
+        } else {
             return response()->json([
                 'Message' => 'Providor credit is not sufficient.'
-            ],200);
+            ], 200);
         }
-        $serviceprovider->credit = (string)$sum;
+        $serviceprovider->credit = (string) $sum;
         $serviceprovider->save();
 
         return response()->json([
             'Message' => 'Creadit Substracted.'
-        ],200);
+        ], 200);
     }
 }
