@@ -109,20 +109,14 @@ Route::get('test', function () {
 
 Route::post('upload', function (Request $request) {
 
-    $imageName = time() . '.' . $request->photo->getClientOriginalExtension();
-    $image = base64_decode($request->photo);
-    $file = fopen('uploadedphotos/' . $imageName, 'wb');
-    fwrite($file, $image);
-    fclose($file);
-    //$url = 'http://107.181.170.128/public/uploadedphotos/' . $imageName;
-    $url = 'http://107.181.170.128/public/uploadedphotos/' . $imageName;
+    $request->validate([
+        'photo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    $avatarName = '_avatar' . time() . '.' . request()->photo->getClientOriginalExtension();
+    $request->photo->storeAs('/avatars', $avatarName);
+    $url = 'http://107.181.170.128/public/uploadedphotos/' . $avatarName;
     return response()->json([
         'url' => $url
-    ], 200);
-
-    // $request->photo->move(public_path('uploadedphotos'), $imageName);
-    // $url = 'http://107.181.170.128/public/uploadedphotos/' . $imageName;
-    // return response()->json([
-    //     'url' => $url
-    // ], 200);
+    ]);
 });
