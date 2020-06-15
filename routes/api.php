@@ -109,10 +109,20 @@ Route::get('test', function () {
 
 Route::post('upload', function (Request $request) {
 
-    $imageName = time() . '.' . $request->input_img->getClientOriginalExtension();
-    $request->input_img->move(public_path('uploadedphotos'), $imageName);
+    $imageName = time() . '.' . $request->photo->getClientOriginalExtension();
+    $image = base64_decode($request->photo);
+    $file = fopen('uploadedphotos/' . $imageName, 'wb');
+    fwrite($file, $image);
+    fclose($file);
+    //$url = 'http://107.181.170.128/public/uploadedphotos/' . $imageName;
     $url = 'http://107.181.170.128/public/uploadedphotos/' . $imageName;
     return response()->json([
         'url' => $url
     ], 200);
+
+    // $request->photo->move(public_path('uploadedphotos'), $imageName);
+    // $url = 'http://107.181.170.128/public/uploadedphotos/' . $imageName;
+    // return response()->json([
+    //     'url' => $url
+    // ], 200);
 });
