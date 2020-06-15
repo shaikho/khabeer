@@ -115,7 +115,7 @@ Route::post('upload', function (Request $request) {
 
     $avatarName = '_avatar' . time() . '.' . request()->photo->getClientOriginalExtension();
     $request->photo->storeAs('/avatars', $avatarName);
-    $url = 'http://107.181.170.128/app/avatars/' . $avatarName;
+    $url = 'http://107.181.170.128/storage/app/avatars/' . $avatarName;
     return response()->json([
         'url' => $url
     ]);
