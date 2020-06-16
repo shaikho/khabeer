@@ -340,6 +340,62 @@ class RequestController extends Controller
         return new RequestResource($requests);
     }
 
+    public function requestsbydistance(Request $request)
+    {
+        $request->validate([
+            'distance' => 'required',
+            'location' => 'required'
+        ]);
+
+        $distance = $request->distance * 0.005;
+        $location = strtok($request->location, ",");
+        $long = $location;
+        $location = strtok(",");
+        $lat = $location;
+
+        $minlong = $long - $distance;
+        $maxlong = $long + $distance;
+        $minlat = $lat - $distance;
+        $maxlat = $lat + $distance;
+
+        $requests = RM::All();
+
+        $filterrequests = [];
+        foreach ($requests as $req) {
+
+            $req->serviceprovidername = 'N/A';
+            $req->customername = 'N/A';
+
+            $serviceprovider = ServiceProvidor::find($req->providerid);
+            $user = User::find($req->userid);
+
+            if (!empty($serviceprovider->username)) {
+                $req->serviceprovidername = $serviceprovider->username;
+            }
+            if (!empty($user->username)) {
+                $req->customername = $user->username;
+            }
+
+            $reqlocation = strtok($req->location, ",");
+            $reqlong = $location;
+            $reqlocation = strtok(",");
+            $reqlat = $reqlocation;
+
+            if ($reqlong >= $minlong && $reqlong <= $maxlong && $reqlat >= $minlat && $reqlat <= $maxlat) {
+                array_push($filterrequests, $req);
+            }
+        }
+
+        return response()->json([
+            'distance' => $distance,
+            'minlong' => $minlong,
+            'maxlong' => $maxlong,
+            'minlat' => $minlat,
+            'maxlat' => $maxlat,
+            'requests' => $filterrequests
+        ]);
+    }
+
     public function filterrequestsbytwo(Request $request)
     {
         $request->validate([
