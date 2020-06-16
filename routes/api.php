@@ -50,7 +50,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('serviceprovidor', 'ServiceProvidorController@store');
     Route::delete('serviceprovidor/{id}', 'ServiceProvidorController@destroy');
     Route::post('rateserviceprovidor/{id}', 'ServiceProvidorController@rate');
-    Route::post('uploadprovidorprofileimg/{id}', 'ServiceProvidorController@uploadprofileimg');
+
     Route::post('filterprovidors', 'ServiceProvidorController@filterserviceprovidors');
     Route::post('addcredit', 'ServiceProvidorController@addcredit');
     Route::post('subcredit', 'ServiceProvidorController@substractcredit');
@@ -72,7 +72,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('user', 'UserController@store');
     Route::delete('user/{id}', 'UserController@destroy');
     Route::get('otpuser', 'UserController@otpuser');
-    Route::post('uploaduserprofileimg/{id}', 'UserController@uploadprofileimg');
+
     Route::post('rateuser/{id}', 'UserController@rate');
     Route::post('notifyuser', 'UserController@notifyuser');
     //admins
@@ -81,7 +81,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('admin', 'AdminController@store');
     Route::put('admin', 'AdminController@store');
     Route::delete('admin/{id}', 'AdminController@destroy');
-    Route::post('uploadadminprofileimg/{id}', 'AdminController@uploadprofileimg');
+
     Route::post('iconsupload/{id}', 'AdminController@uploadicon');
     //violations
     Route::get('violations', 'ViolationController@index');
@@ -96,6 +96,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('scheduled', 'RequestController@scheduled');
     Route::get('allscheduled', 'RequestController@allscheduledrequestes');
 });
+
+Route::post('uploadprovidorprofileimg/{id}', 'ServiceProvidorController@uploadprofileimg');
+Route::post('uploaduserprofileimg/{id}', 'UserController@uploadprofileimg');
+Route::post('uploadadminprofileimg/{id}', 'AdminController@uploadprofileimg');
 
 Route::get('test', function () {
     $temp = '966565119873';
