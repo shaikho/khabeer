@@ -154,9 +154,12 @@ class UserController extends Controller
         // $path = $request->file('photo')->move(public_path("uploads/"), $filename);
         // $photoURL = url('uploads/' . $filename);
         //new upload
-        $imageName = time() . '.' . $request->photo->getClientOriginalExtension();
-        $request->photo->move(public_path('uploadedphotos'), $imageName);
-        $url = 'http://107.181.170.128/public/uploadedphotos/' . $imageName;
+        // $imageName = time() . '.' . $request->photo->getClientOriginalExtension();
+        // $request->photo->move(public_path('uploadedphotos'), $imageName);
+        // $url = 'http://107.181.170.128/public/uploadedphotos/' . $imageName;
+        $avatarName = $user->username . '_avatar' . time() . '.' . request()->photo->getClientOriginalExtension();
+        $request->photo->storeAs('/avatars', $avatarName);
+        $url = 'http://107.181.170.128/storage/app/avatars/' . $avatarName;
         $user->profileimg = $url;
         $user->save();
         return response()->json([
