@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use DateTime;
 use App\RM;
 use App\Admin;
-
+use Carbon\Carbon;
 
 class ViolationController extends Controller
 {
@@ -227,12 +227,37 @@ class ViolationController extends Controller
         $allrequests = RM::orderBy('startdate', 'DESC')->get();
         // $payedrequests = [];
         $sum = 0;
+        $completedRequests = 0;
+        $inProgressRequests = 0;
+
         foreach ($allrequests as $request) {
             if ($request->status == "paymentConfirmed") {
+                $completedRequests = $completedRequests + 1;
                 $sum = $sum + (int) $request->subserviceprice;
+            }
+            if ($request->status == "finished") {
+                $inProgressRequests = $inProgressRequests + 1;
+            }
+            if ($request->status == "waitingPayment") {
+                $inProgressRequests = $inProgressRequests + 1;
+            }
+            if ($request->status == "payed") {
+                $inProgressRequests = $inProgressRequests + 1;
+            }
+            if ($request->status == "approved") {
+                $inProgressRequests = $inProgressRequests + 1;
             }
         }
 
+        $lateRequests = RM::whereDate('startdate', '<=', Carbon::now()->toDateString())->get();
+
+        $allproviders = ServiceProvidor::All();
+        $suspendedTechnicians = 0;
+        foreach ($allproviders as $provider) {
+            if ($provider->active == "pending") {
+                $suspendedTechnicians = $suspendedTechnicians + 1;
+            }
+        }
 
         return response()->json([
             'userscount' => $userscount,
@@ -241,7 +266,11 @@ class ViolationController extends Controller
             'servicescount' => $servicescount,
             'subservicescount' => $subservicescount,
             'sum' => $sum,
-            'requests' => $filteredrequests
+            'completedRequests' => $completedRequests,
+            'inProgressRequests' => $inProgressRequests,
+            'suspendedTechnicians' => $suspendedTechnicians,
+            'requests' => $filteredrequests,
+            'lateRequests' => $lateRequests
         ], 200);
     }
 
