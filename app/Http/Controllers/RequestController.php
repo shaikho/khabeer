@@ -381,7 +381,7 @@ class RequestController extends Controller
             $reqlocation = strtok(",");
             $reqlat = $reqlocation;
 
-            if ($reqlong >= $minlong && $reqlong <= $maxlong && $reqlat >= $minlat && $reqlat <= $maxlat && $req->status == "submited") {
+            if ($reqlong >= $minlong && $reqlong <= $maxlong && $reqlat >= $minlat && $reqlat <= $maxlat && $req->status == "submitted") {
                 array_push($filterrequests, $req);
             }
         }
