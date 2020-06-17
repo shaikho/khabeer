@@ -347,16 +347,18 @@ class RequestController extends Controller
             'location' => 'required'
         ]);
 
-        $distance = $request->distance * 0.005;
+        $distance = floatval($request->distance) * 0.005;
         $location = strtok($request->location, ",");
-        $long = $location;
+        $long = floatval($location);
         $location = strtok(",");
-        $lat = $location;
+        $lat = floatval($location);
 
         $minlong = $long - $distance;
         $maxlong = $long + $distance;
         $minlat = $lat - $distance;
         $maxlat = $lat + $distance;
+
+        $retrivedCount = 0;
 
         $requests = RM::All();
 
@@ -376,13 +378,24 @@ class RequestController extends Controller
                 $req->customername = $user->username;
             }
 
-            $reqlocation = strtok($req->location, ",");
-            $reqlong = $location;
-            $reqlocation = strtok(",");
-            $reqlat = $reqlocation;
+            $reqloc = strtok($req->location, ",");
+            $reqlong = floatval($reqloc);
+            $reqloc = strtok(",");
+            $reqlat = floatval($reqloc);
 
-            if ($reqlong >= $minlong && $reqlong <= $maxlong && $reqlat >= $minlat && $reqlat <= $maxlat && $req->status == "submitted") {
-                array_push($filterrequests, $req);
+            // return response()->json([
+            //     'reqloc' => $reqloc,
+            //     'reqlong' => $reqlong,
+            //     'reqlar' => $reqlat
+            // ]);
+
+            if ($reqlong >= $minlong && $reqlong <= $maxlong) {
+                if ($reqlat >= $minlat && $reqlat <= $maxlat) {
+                    if ($req->status == "submitted") {
+                        array_push($filterrequests, $req);
+                        $retrivedCount = $retrivedCount + 1;
+                    }
+                }
             }
         }
 
@@ -392,6 +405,7 @@ class RequestController extends Controller
             'maxlong' => $maxlong,
             'minlat' => $minlat,
             'maxlat' => $maxlat,
+            'retrivedCount' => $retrivedCount,
             'requests' => $filterrequests
         ]);
     }
