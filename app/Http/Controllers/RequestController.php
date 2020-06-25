@@ -414,7 +414,7 @@ class RequestController extends Controller
     {
         $request->validate([
             'filter' => 'required',
-            'enddate' => 'required',
+            'key' => 'required',
             'alsofilter' => 'required',
             'alsokey' => 'required'
         ]);
