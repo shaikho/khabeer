@@ -202,7 +202,7 @@ class ViolationController extends Controller
         $subservicescount = DB::table('sub_services')->count();
         $requests = RM::orderBy('startdate', 'DESC')->get();
 
-        //getting last 15 request
+        //getting latest 15 request
         $requests = $requests->take(15);
         $filteredrequests = [];
         foreach ($requests as $request) {
@@ -236,7 +236,8 @@ class ViolationController extends Controller
                 $sum = $sum + (int) $request->subserviceprice;
             }
             if ($request->status == "finished") {
-                $inProgressRequests = $inProgressRequests + 1;
+                $completedRequests = $completedRequests + 1;
+                $sum = $sum + (int) $request->subserviceprice;
             }
             if ($request->status == "waitingPayment") {
                 $inProgressRequests = $inProgressRequests + 1;

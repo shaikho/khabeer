@@ -94,7 +94,75 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('scheduled', 'RequestController@scheduled');
     Route::get('allscheduled', 'RequestController@allscheduledrequestes');
 });
+//trmp
+Route::post('ahmed', 'RequestController@filterrequests');
+Route::post('filterrequests', 'RequestController@filterrequests');
+Route::get('user', 'AuthController@user');
+//Route::get('logout', 'AuthController@logout');
+//subservices
+Route::get('subservices', 'SubServiceController@index');
+Route::get('subservice/{id}', 'SubServiceController@show');
+Route::post('subservice', 'SubServiceController@store');
+Route::put('subservice', 'SubServiceController@store');
+Route::delete('subservice/{id}', 'SubServiceController@destroy');
+Route::get('subservicesbyparent/{id}', 'SubServiceController@filteredsubservices');
+//services
+Route::get('services', 'ServiceController@index');
+Route::get('service/{id}', 'ServiceController@show');
+Route::post('service', 'ServiceController@store');
+Route::put('service', 'ServiceController@store');
+Route::delete('service/{id}', 'ServiceController@destroy');
+//servicesprovidors
+Route::get('serviceprovidors', 'ServiceProvidorController@index');
+Route::get('serviceprovidor/{id}', 'ServiceProvidorController@show');
+Route::post('serviceprovidor', 'ServiceProvidorController@store');
+Route::put('serviceprovidor', 'ServiceProvidorController@store');
+Route::delete('serviceprovidor/{id}', 'ServiceProvidorController@destroy');
+Route::post('rateserviceprovidor/{id}', 'ServiceProvidorController@rate');
+Route::post('filterprovidors', 'ServiceProvidorController@filterserviceprovidors');
+Route::post('addcredit', 'ServiceProvidorController@addcredit');
+Route::post('subcredit', 'ServiceProvidorController@substractcredit');
+//requests
+Route::get('requests', 'RequestController@index');
+Route::get('request/{id}', 'RequestController@show');
+Route::post('request', 'RequestController@store');
+Route::put('request', 'RequestController@store');
+Route::delete('request/{id}', 'RequestController@destroy');
+Route::get('userrequests/{id}', 'RequestController@requestsbyuser');
+Route::get('providerrequests/{id}', 'RequestController@requestsbyprovider');
+Route::post('filterrequests', 'RequestController@filterrequests');
+Route::post('filterrequestsbytwo', 'RequestController@filterrequestsbytwo');
+Route::get('getliverequests', 'RequestController@getliverequests');
 
+//users
+Route::get('users', 'UserController@index');
+Route::get('user/{id}', 'UserController@show');
+Route::post('user', 'UserController@store');
+Route::put('user', 'UserController@store');
+Route::delete('user/{id}', 'UserController@destroy');
+Route::get('otpuser', 'UserController@otpuser');
+Route::post('rateuser/{id}', 'UserController@rate');
+Route::post('notifyuser', 'UserController@notifyuser');
+//admins
+Route::get('admins', 'AdminController@index');
+Route::get('admin/{id}', 'AdminController@show');
+Route::post('admin', 'AdminController@store');
+Route::put('admin', 'AdminController@store');
+Route::delete('admin/{id}', 'AdminController@destroy');
+Route::post('iconsupload/{id}', 'AdminController@uploadicon');
+//violations
+Route::get('violations', 'ViolationController@index');
+Route::get('violation/{id}', 'ViolationController@show');
+Route::post('violation', 'ViolationController@store');
+Route::put('violation', 'ViolationController@store');
+Route::delete('violation/{id}', 'ViolationController@destroy');
+Route::get('violationsbyprovidor/{id}', 'ViolationController@violationsbyprovidor');
+Route::get('violationsbyuser/{id}', 'ViolationController@violationsbyuser');
+//summary
+Route::get('summary', 'ViolationController@summary');
+Route::post('scheduled', 'RequestController@scheduled');
+Route::get('allscheduled', 'RequestController@allscheduledrequestes');
+//
 Route::post('uploadprovidorprofileimg/{id}', 'ServiceProvidorController@uploadprofileimg');
 Route::post('uploaduserprofileimg/{id}', 'UserController@uploadprofileimg');
 Route::post('uploadadminprofileimg/{id}', 'AdminController@uploadprofileimg');
