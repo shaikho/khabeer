@@ -243,7 +243,8 @@ class ViolationController extends Controller
                 $inProgressRequests = $inProgressRequests + 1;
             }
             if ($request->status == "payed") {
-                $inProgressRequests = $inProgressRequests + 1;
+                $completedRequests = $completedRequests + 1;
+                $sum = $sum + (int) $request->subserviceprice;
             }
             if ($request->status == "approved") {
                 $inProgressRequests = $inProgressRequests + 1;
