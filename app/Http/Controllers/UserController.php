@@ -128,22 +128,38 @@ class UserController extends Controller
 
     public function otpuser(Request $request)
     {
+        // $otp = rand(100000, 999999);
+        // $messageloadtobesent = '';
+        // $usernumber = $request->phonenumber;
+        // $client = new \GuzzleHttp\Client();
+        // $sentrequest = "https://www.hisms.ws/api.php?send_sms&username=966500253832&password=0919805287&numbers={$usernumber}&sender=khabir&message={$otp}";
+        // $res = $client->get($sentrequest);
+        // $result = $res->getBody();
+        // if (substr($result, 0, 1) == '3') {
+        //     $messageloadtobesent = 'Message sent!';
+        // } else {
+        //     $messageloadtobesent = 'Message not sent!';
+        // }
+        // return response()->json([
+        //     'messagestatus' => $messageloadtobesent,
+        //     'otp' => $otp
+        // ], 200);
+
+        //
+
         $otp = rand(100000, 999999);
-        $messageloadtobesent = '';
         $usernumber = $request->phonenumber;
         $client = new \GuzzleHttp\Client();
-        $sentrequest = "https://www.hisms.ws/api.php?send_sms&username=966500253832&password=0919805287&numbers={$usernumber}&sender=khabir&message={$otp}";
-        $res = $client->get($sentrequest);
+        $sentrequest = $client->request('POST', 'https://www.msegat.com/gw/sendsms.php', ['body' => [
+            'userName' => 'chief20001',
+            'numbers' => $usernumber,
+            'userSender' => 'khabeer',
+            'apiKey' => 'e13b5f6a23a7cc0d392daa2ee155c546',
+            'msg' => $otp
+        ]]);
+        $res = $sentrequest;
         $result = $res->getBody();
-        if (substr($result, 0, 1) == '3') {
-            $messageloadtobesent = 'Message sent!';
-        } else {
-            $messageloadtobesent = 'Message not sent!';
-        }
-        return response()->json([
-            'messagestatus' => $messageloadtobesent,
-            'otp' => $otp
-        ], 200);
+        return $result;
     }
 
     public function uploadprofileimg(Request $request, $id)

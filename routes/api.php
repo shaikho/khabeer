@@ -140,7 +140,7 @@ Route::get('user/{id}', 'UserController@show');
 Route::post('user', 'UserController@store');
 Route::put('user', 'UserController@store');
 Route::delete('user/{id}', 'UserController@destroy');
-Route::get('otpuser', 'UserController@otpuser');
+Route::post('otpuser', 'UserController@otpuser');
 Route::post('rateuser/{id}', 'UserController@rate');
 Route::post('notifyuser', 'UserController@notifyuser');
 //admins
@@ -168,14 +168,28 @@ Route::post('uploaduserprofileimg/{id}', 'UserController@uploadprofileimg');
 Route::post('uploadadminprofileimg/{id}', 'AdminController@uploadprofileimg');
 Route::post('getrequestsbydistance', 'RequestController@requestsbydistance');
 
-Route::get('test', function () {
-    $temp = '966565119873';
+Route::post('smstest', function () {
     $otp = rand(100000, 999999);
-    echo $sentrequest = "https://www.hisms.ws/api.php?send_sms&username=966500253832&password=0919805287&numbers={$temp}&sender=khabir&message={$otp}";
     $client = new \GuzzleHttp\Client();
-    $res = $client->get($sentrequest);
-    $result = $res->getBody();
-    echo $result;
+    $response = $client->request('post', 'https://www.msegat.com/gw/sendsms.php', [
+        'json' => [
+            'userName' => 'chief20001',
+            'numbers' => '966538215687',
+            'userSender' => 'khabeer',
+            'apiKey' => 'e13b5f6a23a7cc0d392daa2ee155c546',
+            'msg' => 'efweferf'
+        ]
+    ]);
+    return $response->getBody();
+    // $res = $client->post('https://www.msegat.com/gw/sendsms.php', [
+    //     'json' => [
+    //         'userName' => 'chief20001',
+    //         'numbers' => '966539115751',
+    //         'userSender' => 'khabeer',
+    //         'apiKey' => 'e13b5f6a23a7cc0d392daa2ee155c546',
+    //         'msg' => 'this is a test'
+    //     ]
+    // ]);
 });
 
 Route::post('upload', function (Request $request) {

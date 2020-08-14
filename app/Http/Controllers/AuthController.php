@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Admin;
@@ -44,22 +45,32 @@ class AuthController extends Controller
         ]);
         $user->save();
         $user = User::findOrFail($user->id);
-        $otp = rand(100000,999999);
-        $messageloadtobesent='';
+        $otp = rand(100000, 999999);
+        $messageloadtobesent = '';
         $usernumber = $request->phonenumber;
+        // $sentrequest = "https://www.hisms.ws/api.php?send_sms&username=966500253832&password=0919805287&numbers={$usernumber}&sender=khabir&message={$otp}";
+        // $res = $client->get($sentrequest);
+        // $result = $res->getBody();
+        // if (substr($result,0,1) == '3'){
+        //     $messageloadtobesent = 'Message sent!';
+        // }
+        // else {
+        //     $messageloadtobesent = 'Message not sent!';
+        // }
         $client = new \GuzzleHttp\Client();
-        $sentrequest = "https://www.hisms.ws/api.php?send_sms&username=966500253832&password=0919805287&numbers={$usernumber}&sender=khabir&message={$otp}";
-        $res = $client->get($sentrequest);
-        $result = $res->getBody();
-        if (substr($result,0,1) == '3'){
-            $messageloadtobesent = 'Message sent!';
-        }
-        else {
-            $messageloadtobesent = 'Message not sent!';
-        }
+        $response = $client->request('post', 'https://www.msegat.com/gw/sendsms.php', [
+            'json' => [
+                'userName' => 'chief20001',
+                'numbers' => $usernumber,
+                'userSender' => 'khabeer',
+                'apiKey' => 'e13b5f6a23a7cc0d392daa2ee155c546',
+                'msg' => $otp
+            ]
+        ]);
+        // echo $response->getBody();
         return response()->json([
             'userstatus' => 'Successfully created user!',
-            'messagestatus' => $messageloadtobesent,
+            'messagestatus' => $response->getBody(),
             'otp' => $otp,
             'userid' => $user->id
         ], 201);
@@ -83,7 +94,7 @@ class AuthController extends Controller
             'notification_token' => 'required'
         ]);
         $credentials = request(['phonenumber', 'password']);
-        if(!Auth::attempt($credentials))
+        if (!Auth::attempt($credentials))
             return response()->json([
                 'message' => 'Unauthorized'
             ], 401);
@@ -108,7 +119,8 @@ class AuthController extends Controller
         ]);
     }
 
-    public function adminslogin(Request $request){
+    public function adminslogin(Request $request)
+    {
         $request->validate([
             'phonenumber' => 'required',
             'password' => 'required'
@@ -117,37 +129,36 @@ class AuthController extends Controller
         $user = Admin::where('phonenumber', request()->phonenumber)->first();
         if (!empty($user->phonenumber)) {
             if (!empty($user->password)) {
-                if ($request->phonenumber == $user->phonenumber && $request->password == $user->password){
-                // log the user in (needed for future requests)
-                Auth::login($user);
-                // get new token
-                $tokenResult = $user->createToken('Personal Access Token');
-                $token = $tokenResult->token;
-                $token->save();
-                // return token in json response
-                return response()->json([
-                    'access_token' => $tokenResult->accessToken,
-                    'token_type' => 'Bearer',
-                    'id' => $user->id,
-                    'role' => $user->role,
-                    'expires_at' => Carbon::parse(
-                        $tokenResult->token->expires_at
-                    )->toDateTimeString()
-                ]);
-            }else {
+                if ($request->phonenumber == $user->phonenumber && $request->password == $user->password) {
+                    // log the user in (needed for future requests)
+                    Auth::login($user);
+                    // get new token
+                    $tokenResult = $user->createToken('Personal Access Token');
+                    $token = $tokenResult->token;
+                    $token->save();
+                    // return token in json response
+                    return response()->json([
+                        'access_token' => $tokenResult->accessToken,
+                        'token_type' => 'Bearer',
+                        'id' => $user->id,
+                        'role' => $user->role,
+                        'expires_at' => Carbon::parse(
+                            $tokenResult->token->expires_at
+                        )->toDateTimeString()
+                    ]);
+                } else {
+                    return response()->json(['error' => 'Unauthorized'], 401);
+                }
+            } else {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
-            }
-            else {
-                return response()->json(['error' => 'Unauthorized'], 401);
-            }
-        }
-        else {
+        } else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
 
-    public function serviceprovidorslogin(Request $request){
+    public function serviceprovidorslogin(Request $request)
+    {
         $request->validate([
             'phonenumber' => 'required',
             'password' => 'required',
@@ -157,37 +168,34 @@ class AuthController extends Controller
         $user = ServiceProvidor::where('phonenumber', request()->phonenumber)->first();
         if (!empty($user->phonenumber)) {
             if (!empty($user->password)) {
-                if ($request->phonenumber == $user->phonenumber && $request->password == $user->password){
+                if ($request->phonenumber == $user->phonenumber && $request->password == $user->password) {
                     // log the user in (needed for future requests)
-                Auth::login($user);
-                $user->notification_token = $request->notification_token;
-                $user->save();
-                // get new token
-                $tokenResult = $user->createToken('Personal Access Token');
-                $token = $tokenResult->token;
-                $token->save();
-                // return token in json response
-                //updating notification token in here
-                return response()->json([
-                    'access_token' => $tokenResult->accessToken,
-                    'token_type' => 'Bearer',
-                    'providerid' => $user->id,
-                    'role' => $user->role,
-                    'active' => $user->active,
-                    'expires_at' => Carbon::parse(
-                        $tokenResult->token->expires_at
-                    )->toDateTimeString()
-                ]);
-                }
-                else {
+                    Auth::login($user);
+                    $user->notification_token = $request->notification_token;
+                    $user->save();
+                    // get new token
+                    $tokenResult = $user->createToken('Personal Access Token');
+                    $token = $tokenResult->token;
+                    $token->save();
+                    // return token in json response
+                    //updating notification token in here
+                    return response()->json([
+                        'access_token' => $tokenResult->accessToken,
+                        'token_type' => 'Bearer',
+                        'providerid' => $user->id,
+                        'role' => $user->role,
+                        'active' => $user->active,
+                        'expires_at' => Carbon::parse(
+                            $tokenResult->token->expires_at
+                        )->toDateTimeString()
+                    ]);
+                } else {
                     return response()->json(['error' => 'Unauthorized'], 401);
                 }
-            }
-            else {
+            } else {
                 return response()->json(['error' => 'Unauthorized'], 401);
             }
-        }
-        else {
+        } else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }

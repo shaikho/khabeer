@@ -16,7 +16,8 @@
         "laravel/passport": "^7.5",
         "laravel/telescope": "^2.1",
         "laravel/tinker": "^1.0",
-        "pusher/pusher-php-server": "~3.0"
+        "pusher/pusher-php-server": "~3.0",
+        "yajra/laravel-oci8": "7"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

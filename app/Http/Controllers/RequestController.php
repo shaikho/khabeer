@@ -147,15 +147,15 @@ class RequestController extends Controller
 
         //getting user id and update statuses
         if ($request->status == 'approved') {
-            $title = 'Your request has been approved';
+            $title = 'Your request has been approved ';
             $body = 'Your requested service has been accepted by service provider ';
             $this->pushnotificationtocustomer($request->userid, $request->providerid, $title, $body);
         } else if ($request->status == 'finished') {
-            $title = 'Your request has been completed';
+            $title = 'Your request has been completed ';
             $body = 'Required payment is  ' . $request->subserviceprive . ' thank you for using our services';
             $this->pushnotificationtocustomer($request->userid, $request->providerid, $title, $body);
         } else if ($request->status == 'payed') {
-            $title = 'Job completed';
+            $title = 'Job completed ';
             $body = 'Job completed Successfully thank you ';
             $this->pushnotificationtoprovider($request->userid, $request->providerid, $title, $body);
         }
