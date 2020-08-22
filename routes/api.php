@@ -71,7 +71,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('user', 'UserController@store');
     Route::put('user', 'UserController@store');
     Route::delete('user/{id}', 'UserController@destroy');
-    Route::get('otpuser', 'UserController@otpuser');
+    //Route::get('otpuser', 'UserController@otpuser');
     Route::post('rateuser/{id}', 'UserController@rate');
     Route::post('notifyuser', 'UserController@notifyuser');
     //admins
@@ -140,7 +140,7 @@ Route::get('user/{id}', 'UserController@show');
 Route::post('user', 'UserController@store');
 Route::put('user', 'UserController@store');
 Route::delete('user/{id}', 'UserController@destroy');
-Route::post('otpuser', 'UserController@otpuser');
+//Route::post('otpuser', 'UserController@otpuser');
 Route::post('rateuser/{id}', 'UserController@rate');
 Route::post('notifyuser', 'UserController@notifyuser');
 //admins
@@ -167,6 +167,9 @@ Route::post('uploadprovidorprofileimg/{id}', 'ServiceProvidorController@uploadpr
 Route::post('uploaduserprofileimg/{id}', 'UserController@uploadprofileimg');
 Route::post('uploadadminprofileimg/{id}', 'AdminController@uploadprofileimg');
 Route::post('getrequestsbydistance', 'RequestController@requestsbydistance');
+//
+Route::post('otpuser/{id}', 'AuthController@otpuser');
+
 
 Route::post('smstest', function () {
     $otp = rand(100000, 999999);

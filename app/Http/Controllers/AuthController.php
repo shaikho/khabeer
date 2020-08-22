@@ -48,15 +48,6 @@ class AuthController extends Controller
         $otp = rand(100000, 999999);
         $messageloadtobesent = '';
         $usernumber = $request->phonenumber;
-        // $sentrequest = "https://www.hisms.ws/api.php?send_sms&username=966500253832&password=0919805287&numbers={$usernumber}&sender=khabir&message={$otp}";
-        // $res = $client->get($sentrequest);
-        // $result = $res->getBody();
-        // if (substr($result,0,1) == '3'){
-        //     $messageloadtobesent = 'Message sent!';
-        // }
-        // else {
-        //     $messageloadtobesent = 'Message not sent!';
-        // }
         $client = new \GuzzleHttp\Client();
         $response = $client->request('post', 'https://www.msegat.com/gw/sendsms.php', [
             'json' => [
@@ -113,6 +104,7 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
             'userid' => $user->id,
             'role' => $user->role,
+            'active' => $user->active,
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString()
@@ -222,5 +214,27 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         return response()->json($request->user());
+    }
+
+    public function otpuser($id)
+    {
+        $user = User::findOrFail($id);
+        $otp = rand(100000, 999999);
+        $usernumber = $user->phonenumber;
+        $client = new \GuzzleHttp\Client();
+        $response = $client->request('post', 'https://www.msegat.com/gw/sendsms.php', [
+            'json' => [
+                'userName' => 'chief20001',
+                'numbers' => $usernumber,
+                'userSender' => 'khabeer',
+                'apiKey' => 'e13b5f6a23a7cc0d392daa2ee155c546',
+                'msg' => $otp
+            ]
+        ]);
+        $res = $response->getBody();
+        return response()->json([
+            'messagestatus' => $res,
+            'otp' => $otp
+        ], 201);
     }
 }
