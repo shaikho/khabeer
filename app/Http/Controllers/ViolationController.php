@@ -231,23 +231,47 @@ class ViolationController extends Controller
         $inProgressRequests = 0;
 
         foreach ($allrequests as $request) {
-            if ($request->status == "paymentConfirmed") {
-                $completedRequests = $completedRequests + 1;
-                $sum = $sum + (int) $request->subserviceprice;
-            }
-            if ($request->status == "finished") {
-                $completedRequests = $completedRequests + 1;
-                $sum = $sum + (int) $request->subserviceprice;
-            }
-            if ($request->status == "waitingPayment") {
-                $inProgressRequests = $inProgressRequests + 1;
-            }
-            if ($request->status == "payed") {
-                $completedRequests = $completedRequests + 1;
-                $sum = $sum + (int) $request->subserviceprice;
-            }
-            if ($request->status == "approved") {
-                $inProgressRequests = $inProgressRequests + 1;
+
+            $check2 = is_numeric($request->subserviceprice);
+            if ($check2) {
+                if ($request->status == "paymentConfirmed") {
+                    $completedRequests = $completedRequests + 1;
+                    $sum = $sum + (int) $request->subserviceprice;
+                }
+                if ($request->status == "finished") {
+                    $completedRequests = $completedRequests + 1;
+                    $sum = $sum + (int) $request->subserviceprice;
+                }
+                if ($request->status == "waitingPayment") {
+                    $inProgressRequests = $inProgressRequests + 1;
+                }
+                if ($request->status == "payed") {
+                    $completedRequests = $completedRequests + 1;
+                    $sum = $sum + (int) $request->subserviceprice;
+                }
+                if ($request->status == "approved") {
+                    $inProgressRequests = $inProgressRequests + 1;
+                }
+            } else {
+                $packedbill = json_decode($request->subserviceprice, true);
+                if ($request->status == "paymentConfirmed") {
+                    $completedRequests = $completedRequests + 1;
+                    $sum = $sum + (int) $packedbill["totalBill"];
+                }
+                if ($request->status == "finished") {
+                    $completedRequests = $completedRequests + 1;
+                    $sum = $sum + (int) $packedbill["totalBill"];
+                }
+                if ($request->status == "waitingPayment") {
+                    $inProgressRequests = $inProgressRequests + 1;
+                }
+                if ($request->status == "payed") {
+                    $completedRequests = $completedRequests + 1;
+                    $sum = $sum + (int) $packedbill["totalBill"];
+                }
+                if ($request->status == "approved") {
+                    $inProgressRequests = $inProgressRequests + 1;
+                }
             }
         }
 
@@ -343,5 +367,10 @@ class ViolationController extends Controller
         }
 
         return new ViolationResource($violations);
+    }
+
+    public function is_JSON($string)
+    {
+        (is_null(json_decode($string, TRUE))) ? FALSE : TRUE;
     }
 }
