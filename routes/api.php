@@ -70,6 +70,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('user/{id}', 'UserController@show');
     Route::post('user', 'UserController@store');
     Route::put('user', 'UserController@store');
+    
     Route::delete('user/{id}', 'UserController@destroy');
     //Route::get('otpuser', 'UserController@otpuser');
     Route::post('rateuser/{id}', 'UserController@rate');
@@ -139,6 +140,7 @@ Route::get('users', 'UserController@index');
 Route::get('user/{id}', 'UserController@show');
 Route::post('user', 'UserController@store');
 Route::put('user', 'UserController@store');
+Route::put('updateActivity', 'UserController@updateActivity');// ahmed 
 Route::delete('user/{id}', 'UserController@destroy');
 //Route::post('otpuser', 'UserController@otpuser');
 Route::post('rateuser/{id}', 'UserController@rate');

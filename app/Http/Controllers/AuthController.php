@@ -48,6 +48,15 @@ class AuthController extends Controller
         $otp = rand(100000, 999999);
         $messageloadtobesent = '';
         $usernumber = $request->phonenumber;
+        // $sentrequest = "https://www.hisms.ws/api.php?send_sms&username=966500253832&password=0919805287&numbers={$usernumber}&sender=khabir&message={$otp}";
+        // $res = $client->get($sentrequest);
+        // $result = $res->getBody();
+        // if (substr($result,0,1) == '3'){
+        //     $messageloadtobesent = 'Message sent!';
+        // }
+        // else {
+        //     $messageloadtobesent = 'Message not sent!';
+        // }
         $client = new \GuzzleHttp\Client();
         $response = $client->request('post', 'https://www.msegat.com/gw/sendsms.php', [
             'json' => [
@@ -104,7 +113,7 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
             'userid' => $user->id,
             'role' => $user->role,
-            'active' => $user->active,
+            'active' =>$user->active,
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString()

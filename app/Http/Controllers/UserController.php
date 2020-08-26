@@ -48,13 +48,14 @@ class UserController extends Controller
             $user->username = $request->input('username');
         }
         //$user->password = $request->input('password');
-        if (empty($request->input('password'))) {
-            return [
-                'Message' => 'password is required.'
-            ];
-        } else {
-            $user->password = $request->input('password');
-        }
+        // if (empty($request->input('password'))) {
+        //     return [
+        //         'Message' => 'password is required.'
+        //     ];
+        // } else 
+        // {
+        //     $user->password = $request->input('password');
+        // }
         //$user->phonenumber = $request->input('phonenumber');
         if (empty($request->input('phonenumber'))) {
             return [
@@ -75,6 +76,19 @@ class UserController extends Controller
             return new UserResource($user);
         }
     }
+
+    // ahmed 
+    public function updateActivity(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        $user->active = $request->input('active');
+
+
+        if ($user->save()) {
+            return new UserResource($user);
+        }
+    }
+
 
     /**
      * Display the specified resource.
