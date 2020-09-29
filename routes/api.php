@@ -70,7 +70,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('user/{id}', 'UserController@show');
     Route::post('user', 'UserController@store');
     Route::put('user', 'UserController@store');
-    
+
     Route::delete('user/{id}', 'UserController@destroy');
     //Route::get('otpuser', 'UserController@otpuser');
     Route::post('rateuser/{id}', 'UserController@rate');
@@ -99,7 +99,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::post('ahmed', 'RequestController@filterrequests');
 Route::post('filterrequests', 'RequestController@filterrequests');
 Route::get('user', 'AuthController@user');
-//Route::get('logout', 'AuthController@logout');
+Route::post('logout', 'AuthController@logout');
 //subservices
 Route::get('subservices', 'SubServiceController@index');
 Route::get('subservice/{id}', 'SubServiceController@show');
@@ -140,7 +140,7 @@ Route::get('users', 'UserController@index');
 Route::get('user/{id}', 'UserController@show');
 Route::post('user', 'UserController@store');
 Route::put('user', 'UserController@store');
-Route::put('updateActivity', 'UserController@updateActivity');// ahmed 
+Route::put('updateActivity', 'UserController@updateActivity'); // ahmed 
 Route::delete('user/{id}', 'UserController@destroy');
 //Route::post('otpuser', 'UserController@otpuser');
 Route::post('rateuser/{id}', 'UserController@rate');

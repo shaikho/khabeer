@@ -400,11 +400,11 @@ class RequestController extends Controller
         }
 
         return response()->json([
-            'distance' => $distance,
-            'minlong' => $minlong,
-            'maxlong' => $maxlong,
-            'minlat' => $minlat,
-            'maxlat' => $maxlat,
+            // 'distance' => $distance,
+            // 'minlong' => $minlong,
+            // 'maxlong' => $maxlong,
+            // 'minlat' => $minlat,
+            // 'maxlat' => $maxlat,
             'retrivedCount' => $retrivedCount,
             'requests' => $filterrequests
         ]);
