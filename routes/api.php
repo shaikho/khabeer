@@ -20,6 +20,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('serviceprovidorslogin', 'AuthController@serviceprovidorslogin');
     Route::post('serviceprovidor', 'ServiceProvidorController@store');
     Route::post('logout', 'AuthController@logout');
+    Route::post('serviceprovidorlogin', 'AuthController@serviceprovidorlogout');
 });
 
 Route::group(['middleware' => ['auth.admins', 'auth:api']], function () {
