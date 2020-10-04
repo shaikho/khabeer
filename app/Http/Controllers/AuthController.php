@@ -217,6 +217,16 @@ class AuthController extends Controller
         ]);
     }
 
+    public function serviceprovidorlogout(Request $request)
+    {
+        $providor = ServiceProvidor::findOrFail($request->id);
+        // $request->user()->token()->revoke();
+        // $user->token()->revoke();
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ]);
+    }
+
     /**
      * Get the authenticated User
      *
