@@ -211,7 +211,7 @@ class AuthController extends Controller
     {
         $user = User::findOrFail($request->id);
         // $request->user()->token()->revoke();
-        $user->token()->revoke();
+        // $user->token()->revoke();
         return response()->json([
             'message' => 'Successfully logged out'
         ]);
